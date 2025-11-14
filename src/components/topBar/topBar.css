@@ -1,4 +1,12 @@
 .topBarContainer {
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.textResult {
+    margin: 0 0 0 40px;
+    color: black;
+    align-content: center;
 }
