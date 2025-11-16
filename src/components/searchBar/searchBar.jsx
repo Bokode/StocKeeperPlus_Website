@@ -7,9 +7,9 @@ function SearchBar({ list, index}) {
   const placeholder = "Search an instance of " + list[index];
 
   return (
-    <div className="searchBarContainer">
+    <div className="containerSearchBar">
       <FontAwesomeIcon icon={faBars} />
-      <input className="inputSearch" placeholder={placeholder} id="id"/>
+      <input className="inputSearchBar" placeholder={placeholder} id="id"/>
       <FontAwesomeIcon icon={faMagnifyingGlass} onClick={() => console.log("search launched")}/>
     </div>
   );
