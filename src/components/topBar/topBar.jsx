@@ -11,11 +11,11 @@ function Topbar() {
   const [indexNumber, setIndexNumber] = useState(0);
 
   return (
-    <div className="topBarContainer">
+    <div className="containerTopBar">
       <AddButton />
       <ListButton list={listTable} index={indexTable} setIndex={setIndexTable}/>
       <SearchBar list={listTable} index={indexTable} setIndex={setIndexTable}/>
-      <p className="textResult">Result </p>
+      <p className="textResultTopBar">Result </p>
       <ListButton list={listNumber} index={indexNumber} setIndex={setIndexNumber}/>
     </div>
   )

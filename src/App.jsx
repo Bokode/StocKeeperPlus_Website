@@ -3,7 +3,7 @@ import Topbar from './components/topBar/topBar';
 
 function App() {
   return (
-    <div className='appContainer'>
+    <div className='containerApp'>
       <Topbar />
     </div>
   )
