@@ -1,6 +1,6 @@
 import './contentTable.css'
 
-function ContentTable({ data }) {
+function ContentTable({ data, viewNumber }) {
   if (!data || data.length === 0) {
     return <p className='waitMessage'>Rien à afficher</p>;
   }
@@ -15,7 +15,7 @@ function ContentTable({ data }) {
           <th className='headerColumn'>action</th>
         </tr>
 
-        {data.map((row, i) => (
+        {data.slice(0,viewNumber).map((row, i) => (
           <tr className='columnTable' key={i}>
             {Object.keys(row).map((key) => {
               let value = row[key];

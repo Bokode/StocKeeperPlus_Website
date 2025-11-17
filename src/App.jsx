@@ -26,7 +26,7 @@ function App() {
   return (
     <div className='containerApp'>
       <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} handleClick={handleClick}/>
-      <ContentTable data={data}/>
+      <ContentTable data={data} viewNumber={listNumber[indexNumber]}/>
     </div>
   )
 }
