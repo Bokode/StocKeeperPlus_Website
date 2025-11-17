@@ -1,4 +1,8 @@
 import './contentTable.css'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faPencil } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 function ContentTable({ data, viewNumber, startItemIndex }) {
   if (!data || data.length === 0) {
@@ -7,12 +11,12 @@ function ContentTable({ data, viewNumber, startItemIndex }) {
 
   return (
     <table className='containerTable'>
-      <tbody>
+      <tbody className='bodyTable'>
         <tr className='columnTable'>
           {Object.keys(data[0]).map((key) => (
             <th className='headerColumn' key={key}>{key}</th>
           ))}
-          <th className='headerColumn'>action</th>
+          <th className='headerColumn actionColumn'>action</th>
         </tr>
 
         {data.slice(startItemIndex, startItemIndex+viewNumber).map((row, i) => (
@@ -30,7 +34,11 @@ function ContentTable({ data, viewNumber, startItemIndex }) {
                 <td className='contentColumn' key={key}>{value}</td>
               );
             })}
-            <td className='contentColumn'>A Faire</td>
+            <td className='contentColumn actionColumn'>
+              <button className='buttonAction'><FontAwesomeIcon icon={faEye} /></button>
+              <button className='buttonAction'><FontAwesomeIcon icon={faPencil} /></button>
+              <button className='buttonAction'><FontAwesomeIcon icon={faTrash} /></button>
+            </td>
           </tr>
         ))}
       </tbody>
