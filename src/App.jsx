@@ -3,9 +3,10 @@ import ContentTable from './components/contentTable/contentTable';
 import Topbar from './components/topBar/topBar';
 import { useState } from 'react';
 
+
 function App() {
   const listTable = ["Food", "FoodUser", "User", "IngredientAmount", "Recipe", "Store", "FoodStore"];
-  const listNumber = [5, 10, 20, 50];
+  const listNumber = [5, 10, 20, 51];
   const [indexTable, setIndexTable] = useState(0);
   const [indexNumber, setIndexNumber] = useState(0);
   const [data, setData] = useState(null)
