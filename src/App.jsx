@@ -1,5 +1,6 @@
 import './App.css'
 import ContentTable from './components/contentTable/contentTable';
+import PageChanger from './components/pageChanger/pageChanger';
 import Topbar from './components/topBar/topBar';
 import { useState, useEffect } from 'react';
 
@@ -8,7 +9,7 @@ function App() {
   const listNumber = [5, 10, 20, 50];
   const [indexTable, setIndexTable] = useState(0);
   const [indexNumber, setIndexNumber] = useState(0);
-  const [data, setData] = useState(null)
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     handleClick()
@@ -26,7 +27,8 @@ function App() {
   return (
     <div className='containerApp'>
       <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} handleClick={handleClick}/>
-      <ContentTable data={data}/>
+      <ContentTable data={data} viewNumber={listNumber[indexNumber]}/>
+      <PageChanger numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0}/>
     </div>
   )
 }
