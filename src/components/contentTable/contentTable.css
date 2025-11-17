@@ -10,3 +10,8 @@
 .contentColumn {
     background-color: grey;
 }
+
+.waitMessage {
+    color: black;
+    text-align: center;
+}
