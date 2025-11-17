@@ -2,19 +2,14 @@ import "./topBar.css"
 import AddButton from "../addButton/addButton";
 import SearchBar from "../searchBar/searchBar";
 import ListButton from "../listButton/listButton";
-import { useState } from "react";
 
-function Topbar() {
-  const listTable = ["Food", "FoodUser", "User", "IngredientAmount", "Recipe", "Store", "FoodStore"];
-  const listNumber = [5, 10, 20, 50];
-  const [indexTable, setIndexTable] = useState(0);
-  const [indexNumber, setIndexNumber] = useState(0);
+function Topbar({ listTable, listNumber, indexTable, indexNumber, setIndexTable, setIndexNumber, handleClick}) {
 
   return (
     <div className="containerTopBar">
       <AddButton />
       <ListButton list={listTable} index={indexTable} setIndex={setIndexTable}/>
-      <SearchBar list={listTable} index={indexTable} setIndex={setIndexTable}/>
+      <SearchBar list={listTable} index={indexTable} setIndex={setIndexTable} handleClick={handleClick}/>
       <p className="textResultTopBar">Result </p>
       <ListButton list={listNumber} index={indexNumber} setIndex={setIndexNumber}/>
     </div>

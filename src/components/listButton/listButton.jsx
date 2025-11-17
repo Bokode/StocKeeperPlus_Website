@@ -4,7 +4,6 @@ import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 function ListButton({ list, index, setIndex }) {
   return (
-    <>
     <div className='containerDropdown'>
       <button className="buttonDropdown">
         <p className='textButton'>{list[index]}</p>
@@ -18,7 +17,6 @@ function ListButton({ list, index, setIndex }) {
         }
       </div>
     </div>
-  </>
   )
 }
 
