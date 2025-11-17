@@ -7,11 +7,17 @@ function Topbar({ listTable, listNumber, indexTable, indexNumber, setIndexTable,
 
   return (
     <div className="containerTopBar">
-      <AddButton />
-      <ListButton list={listTable} index={indexTable} setIndex={setIndexTable}/>
-      <SearchBar list={listTable} index={indexTable} setIndex={setIndexTable} handleClick={handleClick}/>
-      <p className="textResultTopBar">Result </p>
-      <ListButton list={listNumber} index={indexNumber} setIndex={setIndexNumber}/>
+      <div className="separation firstThird">
+        <AddButton />
+        <ListButton list={listTable} index={indexTable} setIndex={setIndexTable}/>
+      </div>
+      <div className="separation secondThird">
+        <SearchBar list={listTable} index={indexTable} setIndex={setIndexTable} handleClick={handleClick}/>
+      </div>
+      <div className="separation thirdThird">
+        <p className="textResultTopBar">Result </p>
+        <ListButton list={listNumber} index={indexNumber} setIndex={setIndexNumber}/>
+      </div>
     </div>
   )
 }

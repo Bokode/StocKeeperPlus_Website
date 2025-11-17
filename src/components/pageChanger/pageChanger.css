@@ -6,7 +6,8 @@
 }
 
 .buttonPageChanger {
-    background-color: grey;
+    background-color: #d9d9d9;
+    color: black;
     border: 2px solid black;
     margin: 1px;
     padding: 1px 5px;
@@ -14,5 +15,6 @@
 }
 
 .buttonPageChanger:hover {
-    background-color: rgb(202, 202, 202);
+    background-color: rgb(94, 94, 94);
+    border: 2px solid black;
 }
