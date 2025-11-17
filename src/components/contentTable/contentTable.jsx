@@ -1,27 +1,49 @@
 import './contentTable.css'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faPencil } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-function ContentTable() {
+function ContentTable({ data, viewNumber, startItemIndex }) {
+  if (!data || data.length === 0) {
+    return <p className='waitMessage'>Rien à afficher</p>;
+  }
+
   return (
     <table className='containerTable'>
-      <tbody>
+      <tbody className='bodyTable'>
         <tr className='columnTable'>
-            <th className='headerColumn'>Company</th>
-            <th className='headerColumn'>Contact</th>
-            <th className='headerColumn'>Action</th>
+          {Object.keys(data[0]).map((key) => (
+            <th className='headerColumn' key={key}>{key}</th>
+          ))}
+          <th className='headerColumn actionColumn'>action</th>
         </tr>
-        <tr className='columnTable'>
-            <td className='contentColumn'>Alfreds Futterkiste</td>
-            <td className='contentColumn'>Maria Anders</td>
-            <td className='contentColumn'>A faire</td>
-        </tr>
-        <tr className='columnTable'>
-            <td className='contentColumn'>Centro comercial Moctezuma</td>
-            <td className='contentColumn'>Francisco Chang</td>
-            <td className='contentColumn'>A faire</td>
-        </tr>
+
+        {data.slice(startItemIndex, startItemIndex+viewNumber).map((row, i) => (
+          <tr className='columnTable' key={i}>
+            {Object.keys(row).map((key) => {
+              let value = row[key];
+              
+              if (typeof value === "boolean") {
+                value = value ? "Oui" : "Non";
+              } else if (key === "expirationdate") {
+                value = value.slice(0, 10);
+              }
+            
+              return (
+                <td className='contentColumn' key={key}>{value}</td>
+              );
+            })}
+            <td className='contentColumn actionColumn'>
+              <button className='buttonAction'><FontAwesomeIcon icon={faEye} /></button>
+              <button className='buttonAction'><FontAwesomeIcon icon={faPencil} /></button>
+              <button className='buttonAction'><FontAwesomeIcon icon={faTrash} /></button>
+            </td>
+          </tr>
+        ))}
       </tbody>
     </table>
-  )
+  );
 }
 
 export default ContentTable;

@@ -9,7 +9,7 @@ function ListButton({ list, index, setIndex }) {
         <p className='textButton'>{list[index]}</p>
         <FontAwesomeIcon icon={faAngleDown} />
       </button>
-      <div className="containernContentDropdown">
+      <div className="containerContentDropdown">
         {
           list.map((item, i) => 
             <button className="buttonContentDropdown" key={i} onClick={() => setIndex(i)}>{item}</button>

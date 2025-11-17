@@ -1,5 +1,5 @@
 .containerAddButton {
-    height: 30px;
+    height: 100%;
     border-radius: 3px;
     background-color: #d9d9d9;
     color: #49454f;
@@ -7,7 +7,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 5px;
+    margin: 0 5px;
     padding: 5px;
 }
 
@@ -17,5 +17,4 @@
 
 .textAddButton {
     margin-left: 3px;
-    height: 100%;
 }
