@@ -1,0 +1,18 @@
+.containerPageChanger {
+    padding: 0 5px;
+    border-radius: 5px;
+    display: flex;
+    margin-top: 30px;
+}
+
+.buttonPageChanger {
+    background-color: grey;
+    border: 2px solid black;
+    margin: 1px;
+    padding: 1px 5px;
+    border-radius: 5px;
+}
+
+.buttonPageChanger:hover {
+    background-color: rgb(202, 202, 202);
+}
