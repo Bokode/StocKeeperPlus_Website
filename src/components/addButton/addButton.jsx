@@ -4,7 +4,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 function AddButton() {
   return (
-    <button className="addButtonContainer">
+    <button className="containerAddButton">
       <FontAwesomeIcon icon={faPlus} />
       <p className='textAddButton'>Add new</p>
     </button>

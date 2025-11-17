@@ -17,15 +17,7 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { PickersDay } from "@mui/x-date-pickers";
 import { styled } from "@mui/material/styles";
 
-const Dot = styled("span")(({ theme, color }) => ({
-  display: "inline-block",
-  width: 8,
-  height: 8,
-  borderRadius: "50%",
-  backgroundColor: color || theme.palette.grey[500],
-  marginLeft: 6,
-  boxShadow: "0 0 0 2px rgba(0,0,0,0.04)",
-}));
+
 
 // Exemple de données - à remplacer par celles de ton backend
 const items = [

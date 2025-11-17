@@ -4,21 +4,19 @@ import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 function ListButton({ list, index, setIndex }) {
   return (
-    <>
-    <div className='dropdown'>
-      <button className="listButtonContainer">
-        <p className='textListButton'>{list[index]}</p>
+    <div className='containerDropdown'>
+      <button className="buttonDropdown">
+        <p className='textButton'>{list[index]}</p>
         <FontAwesomeIcon icon={faAngleDown} />
       </button>
-      <div className="dropdown-content">
+      <div className="containernContentDropdown">
         {
           list.map((item, i) => 
-            <button className="dropdown-button" key={i} onClick={() => setIndex(i)}>{item}</button>
+            <button className="buttonContentDropdown" key={i} onClick={() => setIndex(i)}>{item}</button>
           )
         }
       </div>
     </div>
-  </>
   )
 }
 
