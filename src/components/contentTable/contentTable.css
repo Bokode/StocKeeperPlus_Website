@@ -1,0 +1,12 @@
+.containerTable {
+    width: 100%;
+    background-color: black;
+}
+
+.headerColumn {
+    background-color: #2d2d2d;
+}
+
+.contentColumn {
+    background-color: grey;
+}
