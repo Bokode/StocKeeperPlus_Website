@@ -9,11 +9,16 @@ function App() {
   const listNumber = [5, 10, 20, 50];
   const [indexTable, setIndexTable] = useState(0);
   const [indexNumber, setIndexNumber] = useState(0);
+  const [startItemIndex, setStartItemIndex] = useState(0);
   const [data, setData] = useState(null);
 
   useEffect(() => {
     handleClick()
   }, [indexTable]);
+
+  function onPageChange(i) {
+    setStartItemIndex((i-1)*listNumber[indexNumber]);
+  }
 
   function handleClick() {
     const tableToSearch = listTable[indexTable][0].toLocaleLowerCase() + listTable[indexTable].slice(1);
@@ -27,8 +32,8 @@ function App() {
   return (
     <div className='containerApp'>
       <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} handleClick={handleClick}/>
-      <ContentTable data={data} viewNumber={listNumber[indexNumber]}/>
-      <PageChanger numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0}/>
+      <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex}/>
+      <PageChanger numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0} onPageChange={onPageChange}/>
     </div>
   )
 }
