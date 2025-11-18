@@ -28,36 +28,6 @@ export function getUrgencyLabel(expirationDate)
     return `${daysUntilExpiry}j`;
 }
 
-export async function alterQuantity(user_mail, item, delta, setItems, onDeleteRequest) 
-{
-    const newQtt = item.quantity + delta;
-    
-    if (newQtt <= 0) 
-    {
-        const confirmed = await onDeleteRequest(item);
-        if (confirmed) 
-        {
-            deleteProduct(user_mail, item, setItems);
-        } 
-    } else {
-    
-    const updatedItem = {
-      user_mail,
-      food_id: item.id,
-      quantity: newQtt
-    };
-
-    setItems(prev => prev.map(i => i.id === item.id ? { ...i, quantity: newQtt } : i));
-
-    fetch('http://localhost:3001/foodUser/', 
-    {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedItem),
-    }).catch(err => console.error(err));
-    }
-}
-
 export function deleteProduct(user_mail, item, setItems) 
 {
   
@@ -75,16 +45,5 @@ export function deleteProduct(user_mail, item, setItems)
     }).catch(err => console.error(err));
 }
 
-export async function deleteProductWithConfirm(user_mail, item, setItems, confirmCallback) 
-{
-    if (confirmCallback) 
-    {
-        const confirmed = await confirmCallback(item);
-        if (confirmed) 
-        {
-            deleteProduct(user_mail, item, setItems);
-        }
-    }
-}
 
 export default getUrgencyColor;
