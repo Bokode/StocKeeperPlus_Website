@@ -5,8 +5,6 @@ import Topbar from './components/topBar/topBar';
 import ConfirmationPopUp from './components/confirmationPopUp/confirmationPopUp';
 import { useState, useEffect } from 'react';
 
-
-
 function App() {
   const listTable = ["Food", "FoodUser", "User", "IngredientAmount", "Recipe", "Store", "FoodStore"];
   const listNumber = [5, 10, 20, 51];
@@ -14,6 +12,8 @@ function App() {
   const [indexNumber, setIndexNumber] = useState(0);
   const [startItemIndex, setStartItemIndex] = useState(0);
   const [data, setData] = useState(null);
+  const [showConfirmationPopUp, setShowConfirmationPopUp] = useState(true);
+  const [textConfirmationPopUp, setTextConfirmationPopUp] = useState("Etes vous sur de vouloir supprimer cette instance ?");
 
   useEffect(() => {
     handleClick()
@@ -35,9 +35,9 @@ function App() {
   return (
     <div className='containerApp'>
       <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} handleClick={handleClick}/>
-      <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex}/>
+      <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex} setShowConfirmationPopUp={setShowConfirmationPopUp} setTextConfirmationPopUp={setTextConfirmationPopUp}/>
       <PageChanger numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0} onPageChange={onPageChange}/>
-      <ConfirmationPopUp />
+      {showConfirmationPopUp && (<ConfirmationPopUp text={textConfirmationPopUp} />)}
     </div>
   )
 }

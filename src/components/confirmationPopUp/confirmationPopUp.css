@@ -1,4 +1,31 @@
+.backgroundPopUp {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    min-height: 100%;
+    opacity: 80%;
+    background-color: grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .containerConfirmationPopUp {
-    position: absolute;
-    border: 1px solid red;
+    background-color: red;
+    width: 450px;
+    height: 110px;
+    padding: 15px 0;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.containerButtonPopUp {
+    width: 200px;
+    display: flex;
+    justify-content: space-around;
 }

@@ -4,9 +4,14 @@ import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-function ContentTable({ data, viewNumber, startItemIndex }) {
+function ContentTable({ data, viewNumber, startItemIndex, setShowConfirmationPopUp, setTextConfirmationPopUp }) {
   if (!data || data.length === 0) {
-    return <p className='waitMessage'>Rien à afficher</p>;
+    return (
+      <>
+        <p className='waitMessage'>Oups — on n'a rien trouvé ici. 😢</p>
+        <p className='waitMessage'>Essayez une autre recherche</p>
+      </>
+    )
   }
 
   return (
@@ -37,7 +42,7 @@ function ContentTable({ data, viewNumber, startItemIndex }) {
             <td className='contentColumn actionColumn'>
               <button className='buttonAction'><FontAwesomeIcon icon={faEye} /></button>
               <button className='buttonAction'><FontAwesomeIcon icon={faPencil} /></button>
-              <button className='buttonAction'><FontAwesomeIcon icon={faTrash} /></button>
+              <button className='buttonAction'><FontAwesomeIcon icon={faTrash} onClick={() => {setShowConfirmationPopUp(true); setTextConfirmationPopUp("Etes vous sur de vouloir supprimer cette instance ?");}}/></button>
             </td>
           </tr>
         ))}
