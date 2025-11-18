@@ -2,7 +2,7 @@ import './confirmationPopUp.css'
 
 function ConfirmationPopUp({ text }) {
   return (
-    <div>
+    <div className='containerConfirmationPopUp'>
         <p>{text}</p>
         <div>
             <button>Non</button>

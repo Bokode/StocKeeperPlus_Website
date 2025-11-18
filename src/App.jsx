@@ -2,6 +2,7 @@ import './App.css'
 import ContentTable from './components/contentTable/contentTable';
 import PageChanger from './components/pageChanger/pageChanger';
 import Topbar from './components/topBar/topBar';
+import ConfirmationPopUp from './components/confirmationPopUp/confirmationPopUp';
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
       <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} handleClick={handleClick}/>
       <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex}/>
       <PageChanger numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0} onPageChange={onPageChange}/>
+      <ConfirmationPopUp />
     </div>
   )
 }
