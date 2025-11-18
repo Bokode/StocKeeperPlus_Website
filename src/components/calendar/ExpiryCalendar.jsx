@@ -1,9 +1,3 @@
-/**
- * ExpiryCalendar.jsx
- * 
- * Composant React affichant un calendrier interactif avec visualisation des produits 
- * arrivant à expiration. Utilise l'API moderne de MUI X Date Pickers avec slots.
- */
 
 import * as React from 'react';
 import dayjs from 'dayjs';
@@ -12,7 +6,6 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import List from '@mui/material/List';
 
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -21,44 +14,36 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { Button, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
-
-import renderProductList from './productList';
-
+import ProductList from './productList';
 import ServerDay from './serverDay';
 
+export default function ExpiryCalendar() 
+{
 
-
-/**
- * Composant principal ExpiryCalendar
- * 
- * Affiche un calendrier interactif avec des marqueurs visuels pour les dates de péremption
- * et une liste détaillée des produits pour le jour sélectionné.
- * 
- * @param {Object} props - Props du composant
- * @param {Array} [props.items=MOCK_ITEMS] - Liste de produits à afficher
- * @returns {JSX.Element} Interface calendrier + liste de produits
- */
-export default function ExpiryCalendar() {
-  // État: jour actuellement sélectionné (par défaut = aujourd'hui)
   const [selectedDay, setSelectedDay] = React.useState(dayjs());
   const [items, setItems] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
-  React.useEffect(() => {
-    async function fetchData() {
+  React.useEffect(() => 
+  {
+    async function fetchData() 
+    {
       try {
         const res = await fetch(`http://localhost:3001/foodUser/calendar/client@test.com/foods`);
-        if (!res.ok) {
+        if (!res.ok) 
+        {
           console.error("Erreur API :", res.status);
           return;
         }
         const data = await res.json();
         setItems(data);
-      } catch (err) {
+      } catch (err) 
+      {
         console.error("Erreur fetch :", err);
-      } finally {
+      } finally 
+      {
         setLoading(false);
       }
     }
@@ -66,17 +51,16 @@ export default function ExpiryCalendar() {
     fetchData();
   }, []);
 
-  /**
-   * Construit une Map de date -> items pour optimiser les performances
-   * La Map est recalculée uniquement si 'items' change
-   */
-  const itemsByDate = React.useMemo(() => {
+  const itemsByDate = React.useMemo(() => 
+  {
     const map = new Map();
     
-    items.forEach((item) => {
+    items.forEach((item) => 
+    {
       const dateKey = dayjs(item.expirationDate).format('YYYY-MM-DD');
       
-      if (!map.has(dateKey)) {
+      if (!map.has(dateKey)) 
+      {
         map.set(dateKey, []);
       }
       
@@ -86,11 +70,10 @@ export default function ExpiryCalendar() {
     return map;
   }, [items]);
 
-  /**
-   * Gère le changement de date sélectionnée dans le calendrier
-   */
-  const handleDateChange = React.useCallback((newDate) => {
-    if (newDate && dayjs(newDate).isValid()) {
+  const handleDateChange = React.useCallback((newDate) => 
+  {
+    if (newDate && dayjs(newDate).isValid()) 
+    {
       setSelectedDay(dayjs(newDate));
     }
   }, []);
@@ -100,13 +83,22 @@ export default function ExpiryCalendar() {
   const selectedDayItems = itemsByDate.get(selectedDayKey) || [];
 
   
-if (loading) {
-  return (
-    <div style={{ display: "flex", justifyContent: "center", padding: "2rem" }}>
-      <CircularProgress/>
-    </div>
-  );
-}
+  if (loading) 
+  {
+    return (
+      <div style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(255,255,255,0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 9999
+      }}>
+        <CircularProgress/>
+      </div>
+    );
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -244,16 +236,7 @@ if (loading) {
                   </Typography>
                 </Box>
               ) : (
-                <List sx={{overflow:'auto'}}>
-                  
-                    {selectedDayItems.length === 0 ? (
-                      <Typography>Aucun produit ce jour-là</Typography>
-                    ) : (
-                      renderProductList(selectedDayItems, setItems)
-                    )}
-                
-
-                </List>
+                <ProductList selectedDayItems={selectedDayItems} setItems={setItems} />
               )}
               </Box>
             </Paper>
