@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { capitalize, getUrgencyColor, getUrgencyLabel } from './utils';
 
-export default function ProductList({ selectedDayItems, setItems }) 
+export default function ProductList({ selectedDayItems, setItems, UserID }) 
 {
     const [confirmDialog, setConfirmDialog] = useState({ open: false, item: null, action: null });
 
@@ -47,7 +47,7 @@ export default function ProductList({ selectedDayItems, setItems })
             {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_mail: "client@test.com", food_id: item.id, quantity: newQtt }),
+                body: JSON.stringify({ user_mail: `${UserID}`, food_id: item.id, quantity: newQtt }),
             }).catch(err => console.error(err));
         }
     };
@@ -61,7 +61,7 @@ export default function ProductList({ selectedDayItems, setItems })
             {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_mail: "client@test.com", food_id: item.id }),
+                body: JSON.stringify({ user_mail: `${UserID}`, food_id: item.id }),
             }).catch(err => console.error(err));
     };
 

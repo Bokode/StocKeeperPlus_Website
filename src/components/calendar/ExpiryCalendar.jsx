@@ -19,24 +19,32 @@ import { CircularProgress } from '@mui/material';
 import ProductList from './productList';
 import ServerDay from './serverDay';
 
-export default function ExpiryCalendar() 
+export default function ExpiryCalendar({UserID}) 
 {
 
   const [selectedDay, setSelectedDay] = React.useState(dayjs());
   const [items, setItems] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
 
   React.useEffect(() => 
   {
     async function fetchData() 
     {
       try {
-        const res = await fetch(`http://localhost:3001/foodUser/calendar/client@test.com/foods`);
+        console.log(UserID);
+        const encoded = encodeURIComponent(UserID);
+
+        const res = await fetch(
+          `http://localhost:3001/foodUser/calendar/${encoded}/foods`
+        );
         if (!res.ok) 
         {
           console.error("Erreur API :", res.status);
+          setError(res.status);
           return;
         }
+        setError(null);
         const data = await res.json();
         setItems(data);
       } catch (err) 
@@ -49,7 +57,7 @@ export default function ExpiryCalendar()
     }
 
     fetchData();
-  }, []);
+  }, [UserID]);
 
   const itemsByDate = React.useMemo(() => 
   {
@@ -99,6 +107,16 @@ export default function ExpiryCalendar()
       </div>
     );
   }
+  
+  if (error) 
+  {
+    return (
+      <Box sx={{ width: '100%', height: '100%', display:'flex', alignItems:'center', justifyContent:'center' }}>
+        <Paper sx={{color:"red", p:2, mt:2}}>{error === 404 ? `Client ${UserID} introuvable ` : `Erreur API: ${error}`}</Paper>
+      </Box>
+    );
+  }
+
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -119,7 +137,9 @@ export default function ExpiryCalendar()
               <Typography variant="h5" gutterBottom fontWeight={600}>
                 Calendrier d'expiration
               </Typography>
-
+              <Typography variant="h6" gutterBottom fontWeight={600}>
+                de {UserID}
+              </Typography>
               <Divider sx={{ mb: 2 }} />
 
               {/* Calendrier avec badges personnalisés via slots */}
@@ -236,7 +256,7 @@ export default function ExpiryCalendar()
                   </Typography>
                 </Box>
               ) : (
-                <ProductList selectedDayItems={selectedDayItems} setItems={setItems} />
+                <ProductList selectedDayItems={selectedDayItems} setItems={setItems} UserID={UserID}/>
               )}
               </Box>
             </Paper>
