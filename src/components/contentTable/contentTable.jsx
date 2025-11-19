@@ -1,10 +1,15 @@
 import './contentTable.css'
+import ConfirmationDeletePopUp from '../confirmationDeletePopUp/confirmationDeletePopUp';
+import { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-function ContentTable({ data, viewNumber, startItemIndex, setShowConfirmationPopUp, setTextConfirmationPopUp }) {
+function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB }) {
+  const [idInstanceAction, setIdInstanceAction] = useState(0);
+  const [showConfirmationDeletePopUp, setShowConfirmationDeletePopUp] = useState(false);
+
   if (!data || data.length === 0) {
     return (
       <>
@@ -15,6 +20,7 @@ function ContentTable({ data, viewNumber, startItemIndex, setShowConfirmationPop
   }
 
   return (
+    <>
     <table className='containerTable'>
       <tbody className='bodyTable'>
         <tr className='columnTable'>
@@ -42,12 +48,14 @@ function ContentTable({ data, viewNumber, startItemIndex, setShowConfirmationPop
             <td className='contentColumn actionColumn'>
               <button className='buttonAction'><FontAwesomeIcon icon={faEye} /></button>
               <button className='buttonAction'><FontAwesomeIcon icon={faPencil} /></button>
-              <button className='buttonAction'><FontAwesomeIcon icon={faTrash} onClick={() => {setShowConfirmationPopUp(true); setTextConfirmationPopUp("Etes vous sur de vouloir supprimer cette instance ?");}}/></button>
+              <button className='buttonAction'><FontAwesomeIcon icon={faTrash} onClick={() => {setShowConfirmationDeletePopUp(true); setIdInstanceAction(Object.values(row)[0]);}}/></button>
             </td>
           </tr>
         ))}
       </tbody>
     </table>
+    {showConfirmationDeletePopUp && (<ConfirmationDeletePopUp setShowConfirmationDeletePopUp={setShowConfirmationDeletePopUp} idInstanceAction={idInstanceAction} deleteInstanceFromDB={deleteInstanceFromDB}/>)}
+    </>
   );
 }
 
