@@ -4,10 +4,10 @@ function ConfirmationDeletePopUp({ setShowConfirmationDeletePopUp, idInstanceAct
   return (
     <div className='backgroundPopUp'>
       <div className='containerConfirmationPopUp'>
-          <p>Etes vous sur de vouloir supprimer cette instance ?</p>
+          <p>It will be permanently deleted, continue ?</p>
           <div className='containerButtonPopUp'>
-              <button className='buttonPopUp' onClick={() => setShowConfirmationDeletePopUp(false)}>Non</button>
-              <button className='buttonPopUp'onClick={() => {setShowConfirmationDeletePopUp(false); deleteInstanceFromDB(idInstanceAction);}}>Oui</button>
+              <button className='buttonPopUp' onClick={() => setShowConfirmationDeletePopUp(false)}>Cancel</button>
+              <button className='buttonPopUp'onClick={() => {setShowConfirmationDeletePopUp(false); deleteInstanceFromDB(idInstanceAction);}}>Delete</button>
           </div>
       </div>
     </div>

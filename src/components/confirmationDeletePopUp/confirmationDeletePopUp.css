@@ -5,15 +5,16 @@
     z-index: 100;
     width: 100%;
     min-height: 100%;
-    opacity: 80%;
-    background-color: grey;
+    background-color: rgba(128, 128, 128, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .containerConfirmationPopUp {
-    background-color: red;
+    background-color: #eeeeee;
+    color: black;
+    font-weight: 500;
     width: 450px;
     height: 110px;
     padding: 15px 0;
@@ -25,7 +26,7 @@
 }
 
 .containerButtonPopUp {
-    width: 200px;
+    width: 250px;
     display: flex;
     justify-content: space-around;
 }
