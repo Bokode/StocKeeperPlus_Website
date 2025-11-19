@@ -8,7 +8,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB }) {
   const [idInstanceAction, setIdInstanceAction] = useState(0);
-  const [showConfirmationDeletePopUp, setShowConfirmationDeletePopUp] = useState(false);
+  const [showConfirmationDeletePopUp, setShowConfirmationDeletePopUp] = useState(true);
 
   if (!data || data.length === 0) {
     return (
