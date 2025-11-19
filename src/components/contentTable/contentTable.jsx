@@ -8,7 +8,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB }) {
   const [idInstanceAction, setIdInstanceAction] = useState(0);
-  const [showConfirmationDeletePopUp, setShowConfirmationDeletePopUp] = useState(true);
+  const [showConfirmationDeletePopUp, setShowConfirmationDeletePopUp] = useState(false);
 
   if (!data || data.length === 0) {
     return (
@@ -48,7 +48,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB }
             <td className='contentColumn actionColumn'>
               <button className='buttonAction'><FontAwesomeIcon icon={faEye} /></button>
               <button className='buttonAction'><FontAwesomeIcon icon={faPencil} /></button>
-              <button className='buttonAction'><FontAwesomeIcon icon={faTrash} onClick={() => {setShowConfirmationDeletePopUp(true); setIdInstanceAction(Object.values(row)[0]);}}/></button>
+              <button className='buttonAction' onClick={() => {setShowConfirmationDeletePopUp(true); setIdInstanceAction(Object.values(row)[0]);}}><FontAwesomeIcon icon={faTrash} /></button>
             </td>
           </tr>
         ))}
