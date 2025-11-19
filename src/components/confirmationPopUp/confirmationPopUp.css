@@ -29,3 +29,8 @@
     display: flex;
     justify-content: space-around;
 }
+
+.buttonPopUp:hover {
+    border: none;
+    background-color: grey;
+}

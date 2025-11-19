@@ -12,7 +12,7 @@ function App() {
   const [indexNumber, setIndexNumber] = useState(0);
   const [startItemIndex, setStartItemIndex] = useState(0);
   const [data, setData] = useState(null);
-  const [showConfirmationPopUp, setShowConfirmationPopUp] = useState(true);
+  const [showConfirmationPopUp, setShowConfirmationPopUp] = useState(false);
   const [textConfirmationPopUp, setTextConfirmationPopUp] = useState("Etes vous sur de vouloir supprimer cette instance ?");
 
   useEffect(() => {
@@ -24,7 +24,8 @@ function App() {
   }
 
   function handleClick() {
-    const tableToSearch = listTable[indexTable][0].toLocaleLowerCase() + listTable[indexTable].slice(1);
+    const tableToSearch = listTable[indexTable][0].toLocaleLowerCase() + 
+                          listTable[indexTable].slice(1);
 
     fetch('http://localhost:3001/' + tableToSearch + '/all')
       .then(response => response.json())
@@ -32,12 +33,34 @@ function App() {
       .catch(error => {setData(null); console.log(error)});
   }
 
+  function getInstanceFromDB(id) {
+    const tableToSearch = listTable[indexTable][0].toLocaleLowerCase() +
+                          listTable[indexTable].slice(1);
+
+    const firstColumnKey = Object.keys(data[0])[0];
+
+    fetch('http://localhost:3001/' + tableToSearch + '/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ [firstColumnKey]: id })
+    })
+      .then(response => response.json())
+      .then(json => setData([json]))
+      .catch(error => { setData(null); console.log(error) });
+  }
+
+  function deleteInstanceFromDB(id) {
+    console.log(id);
+  }
+
   return (
     <div className='containerApp'>
-      <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} handleClick={handleClick}/>
+      <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} getInstanceFromDB={getInstanceFromDB}/>
       <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex} setShowConfirmationPopUp={setShowConfirmationPopUp} setTextConfirmationPopUp={setTextConfirmationPopUp}/>
       <PageChanger numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0} onPageChange={onPageChange}/>
-      {showConfirmationPopUp && (<ConfirmationPopUp text={textConfirmationPopUp} />)}
+      {showConfirmationPopUp && (<ConfirmationPopUp text={textConfirmationPopUp} setShowConfirmationPopUp={setShowConfirmationPopUp}/>)}
     </div>
   )
 }
