@@ -1,0 +1,14 @@
+@import "leaflet/dist/leaflet.css";
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.leaflet-container {
+  z-index:0;
+  margin-top: 20px;
+  height: 100%;
+  width: 100%;
+}
