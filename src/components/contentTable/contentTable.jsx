@@ -2,9 +2,7 @@ import './contentTable.css'
 import ConfirmationDeletePopUp from '../confirmationDeletePopUp/confirmationDeletePopUp';
 import { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { faPencil } from '@fortawesome/free-solid-svg-icons';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPencil, faTrash, faCalendar } from '@fortawesome/free-solid-svg-icons';
 
 function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB }) {
   const [idInstanceAction, setIdInstanceAction] = useState(0);
@@ -49,6 +47,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB }
               <button className='buttonAction'><FontAwesomeIcon icon={faEye} /></button>
               <button className='buttonAction'><FontAwesomeIcon icon={faPencil} /></button>
               <button className='buttonAction' onClick={() => {setShowConfirmationDeletePopUp(true); setIdInstanceAction(Object.values(row)[0]);}}><FontAwesomeIcon icon={faTrash} /></button>
+              {(Object.keys(row)[0] == "mail") ? <button className='buttonAction'><FontAwesomeIcon icon={faCalendar} /></button> : <></>}
             </td>
           </tr>
         ))}
