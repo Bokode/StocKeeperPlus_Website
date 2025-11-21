@@ -1,5 +1,6 @@
 import './contentTable.css'
 import ConfirmationDeletePopUp from '../confirmationDeletePopUp/confirmationDeletePopUp';
+import ExpiryCalendar from '../calendar/ExpiryCalendar';
 import { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPencil, faTrash, faCalendar } from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +8,7 @@ import { faEye, faPencil, faTrash, faCalendar } from '@fortawesome/free-solid-sv
 function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB }) {
   const [idInstanceAction, setIdInstanceAction] = useState(0);
   const [showConfirmationDeletePopUp, setShowConfirmationDeletePopUp] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
 
   if (!data || data.length === 0) {
     return (
@@ -47,13 +49,14 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB }
               <button className='buttonAction'><FontAwesomeIcon icon={faEye} /></button>
               <button className='buttonAction'><FontAwesomeIcon icon={faPencil} /></button>
               <button className='buttonAction' onClick={() => {setShowConfirmationDeletePopUp(true); setIdInstanceAction(Object.values(row)[0]);}}><FontAwesomeIcon icon={faTrash} /></button>
-              {(Object.keys(row)[0] == "mail") ? <button className='buttonAction'><FontAwesomeIcon icon={faCalendar} /></button> : <></>}
+              {(Object.keys(row)[0] == "mail") ? <button className='buttonAction' onClick={() => setShowCalendar(!showCalendar)}><FontAwesomeIcon icon={faCalendar} /></button> : <></>}
             </td>
           </tr>
         ))}
       </tbody>
     </table>
     {showConfirmationDeletePopUp && (<ConfirmationDeletePopUp setShowConfirmationDeletePopUp={setShowConfirmationDeletePopUp} idInstanceAction={idInstanceAction} deleteInstanceFromDB={deleteInstanceFromDB}/>)}
+    {showCalendar && (<ExpiryCalendar UserID={Object.values(data)[0]["mail"]}/>)}
     </>
   );
 }
