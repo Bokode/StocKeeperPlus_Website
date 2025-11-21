@@ -28,18 +28,10 @@ function App() {
   }
 
   function getInstanceFromDB(id) {
-    const firstColumnKey = Object.keys(data[0])[0];
-
-    fetch('http://localhost:3001/' + listTable[indexTable] + '/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ [firstColumnKey]: id })
-    })
+    fetch('http://localhost:3001/' + listTable[indexTable] + '/get/' + id)
       .then(response => response.json())
       .then(json => setData([json]))
-      .catch(error => { setData(null); console.log(error) });
+      .catch(error => {setData(null); console.log(error)});
   }
 
   function deleteInstanceFromDB(id) {
