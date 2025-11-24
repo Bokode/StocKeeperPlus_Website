@@ -2,8 +2,8 @@ import './confirmationDeletePopUp.css'
 
 function ConfirmationDeletePopUp({ setShowConfirmationDeletePopUp, idInstanceAction, deleteInstanceFromDB }) {
   return (
-    <div className='backgroundPopUp'>
-      <div className='containerConfirmationPopUp'>
+    <div className='backgroundPopUp' onClick={() => setShowConfirmationDeletePopUp(false)}>
+      <div className='containerConfirmationPopUp' onClick={(e) => e.stopPropagation()}>
           <p>It will be permanently deleted, continue ?</p>
           <div className='containerButtonPopUp'>
               <button className='buttonPopUp' onClick={() => setShowConfirmationDeletePopUp(false)}>Cancel</button>
