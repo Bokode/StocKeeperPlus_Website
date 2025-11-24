@@ -10,17 +10,18 @@ function App() {
   const [indexTable, setIndexTable] = useState(0);
   const [indexNumber, setIndexNumber] = useState(0);
   const [startItemIndex, setStartItemIndex] = useState(0);
+  
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    getAlllInstanceFromDB()
+    getAllInstanceFromDB()
   }, [indexTable]);
 
   function onPageChange(i) {
     setStartItemIndex((i-1)*listNumber[indexNumber]);
   }
 
-  function getAlllInstanceFromDB() {
+  function getAllInstanceFromDB() {
     fetch('http://localhost:3001/' + listTable[indexTable] + '/all')
       .then(response => response.json())
       .then(json => setData(json))
@@ -28,11 +29,33 @@ function App() {
   }
 
   function getInstanceFromDB(id) {
-    fetch('http://localhost:3001/' + listTable[indexTable] + '/get/' + id)
-      .then(response => response.json())
-      .then(json => setData([json]))
-      .catch(error => {setData(null); console.log(error)});
-  }
+  fetch('http://localhost:3001/' + listTable[indexTable] + '/get/' + id)
+    .then(response => response.json())
+    .then(json => {
+      if (json && json[0].message) {
+        console.error("Erreur backend :", json.message);
+        setData([]);
+      } else {
+        setData([json]);
+      }
+    })
+    .catch(error => { setData(null); console.log(error) });
+}
+
+
+  function updateInstanceFromDB(dataInstance) {
+  fetch('http://localhost:3001/' + listTable[indexTable], {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dataInstance)
+  })
+    .then(response => response.json())
+    .then(() => getAllInstanceFromDB())
+    .catch(error => console.log(error));
+}
+
 
   function deleteInstanceFromDB(id) {
     const firstColumnKey = Object.keys(data[0])[0];
@@ -45,14 +68,14 @@ function App() {
       body: JSON.stringify({ [firstColumnKey]: id })
     })
       .then(response => {if (!response.ok) throw new Error('Failed to delete');})
-      .then(() => {getAlllInstanceFromDB();})
+      .then(() => getAllInstanceFromDB())
       .catch(error => { setData(null); console.log(error) });
   }
 
   return (
     <div className='containerApp'>
-      <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} getInstanceFromDB={getInstanceFromDB}/>
-      <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex} deleteInstanceFromDB={deleteInstanceFromDB}/>
+      <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} getInstanceFromDB={getInstanceFromDB} getAllInstanceFromDB={getAllInstanceFromDB}/>
+      <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex} deleteInstanceFromDB={deleteInstanceFromDB} updateInstanceFromDB={updateInstanceFromDB}/>
       <PageChanger numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0} onPageChange={onPageChange}/>
     </div>
   )
