@@ -13,14 +13,14 @@ function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    getAlllInstanceFromDB()
+    getAllInstanceFromDB()
   }, [indexTable]);
 
   function onPageChange(i) {
     setStartItemIndex((i-1)*listNumber[indexNumber]);
   }
 
-  function getAlllInstanceFromDB() {
+  function getAllInstanceFromDB() {
     fetch('http://localhost:3001/' + listTable[indexTable] + '/all')
       .then(response => response.json())
       .then(json => setData(json))
@@ -34,6 +34,10 @@ function App() {
       .catch(error => {setData(null); console.log(error)});
   }
 
+  /*function updateInstanceFromDB(dataInstance) {
+  
+  }*/
+
   function deleteInstanceFromDB(id) {
     const firstColumnKey = Object.keys(data[0])[0];
 
@@ -45,7 +49,7 @@ function App() {
       body: JSON.stringify({ [firstColumnKey]: id })
     })
       .then(response => {if (!response.ok) throw new Error('Failed to delete');})
-      .then(() => {getAlllInstanceFromDB();})
+      .then(() => {getAllInstanceFromDB();})
       .catch(error => { setData(null); console.log(error) });
   }
 
