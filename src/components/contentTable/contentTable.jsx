@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPencil, faTrash, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import UpdatePopUp from '../updatePopUp/updatePopUp';
 
-function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB }) {
+function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, updateInstanceFromDB }) {
   const [idInstanceAction, setIdInstanceAction] = useState(null);
   const [showConfirmationDeletePopUp, setShowConfirmationDeletePopUp] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -61,7 +61,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB }
       {showConfirmationDeletePopUp && (<ConfirmationDeletePopUp setShowConfirmationDeletePopUp={setShowConfirmationDeletePopUp} idInstanceAction={idInstanceAction} deleteInstanceFromDB={deleteInstanceFromDB} />)}
       {showCalendar && (<ExpiryCalendar UserID={data[0].mail} />)}
       {showReadPopUp && (<ReadPopUp setShowReadPopUp={setShowReadPopUp} instanceAction={data.find(row => row[idKey] === idInstanceAction)} dataLabel={columns}/>)}
-      {showUpdatePopUp && (<UpdatePopUp setShowUpdatePopUp={setShowUpdatePopUp} instanceAction={data.find(row => row[idKey] === idInstanceAction)} dataLabel={columns}/>)}
+      {showUpdatePopUp && (<UpdatePopUp setShowUpdatePopUp={setShowUpdatePopUp} instanceAction={data.find(row => row[idKey] === idInstanceAction)} dataLabel={columns} updateInstanceFromDB={updateInstanceFromDB}/>)}
     </>
   );
 }
