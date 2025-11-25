@@ -28,22 +28,5 @@ export function getUrgencyLabel(expirationDate)
     return `${daysUntilExpiry}j`;
 }
 
-export function deleteProduct(user_mail, item, setItems) 
-{
-  
-    setItems(prev => prev.filter(i => i.id !== item.id));
-
-    fetch('http://localhost:3001/foodUser/', 
-    {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(
-        {
-            user_mail,
-            food_id: item.id
-        }),
-    }).catch(err => console.error(err));
-}
-
 
 export default getUrgencyColor;
