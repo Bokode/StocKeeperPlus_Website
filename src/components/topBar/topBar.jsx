@@ -3,12 +3,12 @@ import AddButton from "../addButton/addButton";
 import SearchBar from "../searchBar/searchBar";
 import ListButton from "../listButton/listButton";
 
-function Topbar({ listTable, listNumber, indexTable, indexNumber, setIndexTable, setIndexNumber, getInstanceFromDB, getAllInstanceFromDB}) {
+function Topbar({ listTable, listNumber, indexTable, indexNumber, setIndexTable, setIndexNumber, getInstanceFromDB, getAllInstanceFromDB, setShowCreatePopUp}) {
 
   return (
     <div className="containerTopBar">
       <div className="separation firstThird">
-        <AddButton />
+        <AddButton setShowCreatePopUp={setShowCreatePopUp}/>
         <ListButton list={listTable} index={indexTable} setIndex={setIndexTable}/>
       </div>
       <div className="separation secondThird">
