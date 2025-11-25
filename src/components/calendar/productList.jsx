@@ -31,39 +31,61 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
         closeConfirm();
     };
 
-    const alterQuantity = (item, delta) => 
+    const alterQuantity = async (item, delta) => 
     {
         const newQtt = item.quantity + delta;
     
+    
         if (newQtt <= 0) 
         {
+        
             openConfirm(item, () => deleteProduct(item));
+            return;
         } 
-        else 
+
+        try 
         {
-            setItems(prev => prev.map(i => i.id === item.id ? { ...i, quantity: newQtt } : i));
-      
-            fetch('http://localhost:3001/foodUser/', 
+            const res = await fetch('http://localhost:3001/foodUser/', 
             {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user_mail: `${UserID}`, food_id: item.id, quantity: newQtt }),
-            }).catch(err => console.error(err));
+            });
+        
+            if (!res.ok) 
+            {
+                throw new Error(`Erreur API: ${res.status}`);
+            }
+
+            setItems(prev => prev.map(i => i.id === item.id ? { ...i, quantity: newQtt } : i));
+        
+        } catch(err)
+        {
+            console.error("Erreur lors de la mise à jour de la quantité :", err);
+        
         }
     };
 
-  
-    const deleteProduct = (item) => 
-    {
-        setItems(prev => prev.filter(i => i.id !== item.id));
+    const deleteProduct = async (item) => { 
     
-        fetch('http://localhost:3001/foodUser/', 
-            {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_mail: `${UserID}`, food_id: item.id }),
-            }).catch(err => console.error(err));
-    };
+    setItems(prev => prev.filter(i => i.id !== item.id));
+
+    try {
+        const res = await fetch('http://localhost:3001/foodUser/', { 
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_mail: `${UserID}`, food_id: item.id }),
+        });
+
+        if (!res.ok) {
+            throw new Error(`Erreur HTTP: ${res.status}`);
+        }
+
+    } catch (err) {
+        console.error("Erreur lors de la suppression, restauration de l'item :", err);
+        setItems(prev => [...prev, item]); 
+    }
+};
 
   return (
     <div>
