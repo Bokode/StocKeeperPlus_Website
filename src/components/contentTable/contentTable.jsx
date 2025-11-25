@@ -41,7 +41,6 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
               {columns.map(col => {
                 let value = row[col];
                 if (typeof value === "boolean") value = value ? "Oui" : "Non";
-                if (col === "expirationdate") value = value.slice(0, 10);
                 return <td key={col} className='contentColumn'>{value}</td>;
               })}
 
@@ -61,7 +60,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
       {showConfirmationDeletePopUp && (<ConfirmationDeletePopUp setShowConfirmationDeletePopUp={setShowConfirmationDeletePopUp} idInstanceAction={idInstanceAction} deleteInstanceFromDB={deleteInstanceFromDB} />)}
       {showCalendar && (<ExpiryCalendar UserID={data[0].mail} />)}
       {showReadPopUp && (<ReadPopUp setShowReadPopUp={setShowReadPopUp} instanceAction={data.find(row => row[idKey] === idInstanceAction)} dataLabel={columns}/>)}
-      {showUpdatePopUp && (<UpdatePopUp setShowUpdatePopUp={setShowUpdatePopUp} instanceAction={data.find(row => row[idKey] === idInstanceAction)} dataLabel={columns} updateInstanceFromDB={updateInstanceFromDB}/>)}
+      {showUpdatePopUp && (<UpdatePopUp setShowUpdatePopUp={setShowUpdatePopUp} instanceAction={data.find(row => row[idKey] === idInstanceAction)} dataLabel={columns} updateInstanceFromDB={updateInstanceFromDB}/>)} 
     </>
   );
 }
