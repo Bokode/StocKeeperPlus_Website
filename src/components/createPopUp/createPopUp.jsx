@@ -5,7 +5,10 @@ function CreatePopUp({ setShowCreatePopUp, columnsAdd, createInstanceFromDB }) {
   const filteredColumns = columnsAdd.filter(c => c !== "id");
 
   const initialForm = {};
-  filteredColumns.forEach(c => initialForm[c] = "");
+    filteredColumns.forEach(c => {
+    initialForm[c] = (c === "isadmin") ? false : "";
+  });
+
 
   const [formData, setFormData] = useState(initialForm);
 
