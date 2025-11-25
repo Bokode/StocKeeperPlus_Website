@@ -30,6 +30,7 @@ function App() {
   }
 
   function createInstanceFromDB(dataInstance) {
+    console.log(dataInstance);
     fetch('http://localhost:3001/' + listTable[indexTable], {
       method: 'POST',
       headers: {
@@ -38,7 +39,13 @@ function App() {
       body: JSON.stringify(dataInstance)
     })
       .then(response => response.json())
-      .then((json) => {alert(json[0].message); getAllInstanceFromDB();})
+      .then(json => {
+        if (json && json[0].message) {
+          alert(json[0].message)
+        } else {
+          getAllInstanceFromDB();
+        }
+      })
       .catch(error => console.log(error));
   }
 
@@ -54,7 +61,7 @@ function App() {
       .then(response => response.json())
       .then(json => {
         if (json && json[0].message) {
-          console.error("Erreur backend :", json.message);
+          console.error("Erreur :", json.message);
           setData([]);
         } else {
           setData([json]);
@@ -73,7 +80,13 @@ function App() {
       body: JSON.stringify(dataInstance)
     })
       .then(response => response.json())
-      .then((json) => {alert(json[0].message); getAllInstanceFromDB();})
+      .then(json => {
+        if (json && json[0].message) {
+          alert(json[0].message)
+        } else {
+          getAllInstanceFromDB();
+        }
+      })
       .catch(error => console.log(error));
   }
 

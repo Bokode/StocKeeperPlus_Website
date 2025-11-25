@@ -7,7 +7,6 @@ function ReadPopUp({ setShowReadPopUp, instanceAction, dataLabel }) {
           {dataLabel.map((key) => {
             let value = instanceAction[key];
             if (typeof value === "boolean") value = value ? "Oui" : "Non";
-            if (key === "expirationdate") value = value.slice(0, 10);
 
           return (
             <p className='textReadInstance' key={key}>{key.charAt(0).toUpperCase() + key.slice(1)} : {value}</p>

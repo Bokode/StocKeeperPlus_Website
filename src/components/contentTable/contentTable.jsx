@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPencil, faTrash, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import UpdatePopUp from '../updatePopUp/updatePopUp';
-import CreatePopUp from '../createPopUp/createPopUp';
 
 function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, updateInstanceFromDB }) {
   const [idInstanceAction, setIdInstanceAction] = useState(null);
@@ -42,7 +41,6 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
               {columns.map(col => {
                 let value = row[col];
                 if (typeof value === "boolean") value = value ? "Oui" : "Non";
-                if (col === "expirationdate") value = value.slice(0, 10);
                 return <td key={col} className='contentColumn'>{value}</td>;
               })}
 

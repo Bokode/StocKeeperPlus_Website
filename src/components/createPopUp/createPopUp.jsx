@@ -2,9 +2,10 @@ import './createPopUp.css'
 import { useState } from "react";
 
 function CreatePopUp({ setShowCreatePopUp, columnsAdd, createInstanceFromDB }) {
+  const filteredColumns = columnsAdd.filter(c => c !== "id");
 
   const initialForm = {};
-  columnsAdd.forEach(c => initialForm[c] = "");
+  filteredColumns.forEach(c => initialForm[c] = "");
 
   const [formData, setFormData] = useState(initialForm);
 
@@ -15,16 +16,20 @@ function CreatePopUp({ setShowCreatePopUp, columnsAdd, createInstanceFromDB }) {
   return (
     <div className="backgroundPopUp" onClick={() => setShowCreatePopUp(false)}>
       <div className="containerContentPopUp" onClick={(e) => e.stopPropagation()}>
-        
-        {columnsAdd.map(col => (
-          <div key={col} className="containerReadInstance">
-            <p className="textReadInstance">{col} :</p>
-            <input 
-              className="inputReadInstance"
-              onChange={(e) => handleChange(col, e.target.value)}
-            />
-          </div>
-        ))}
+        {filteredColumns.map(col => {
+          const value = formData[col];
+          const isBoolean = col == "isadmin";
+          return (
+            <div key={col} className="containerReadInstance">
+              <p className="textReadInstance">{col} :</p>
+              {isBoolean ? (
+                <input type="checkbox" checked={value} onChange={(e) => handleChange(col, e.target.checked)}/>
+              ) : (
+                <input className="inputReadInstance" value={value} onChange={(e) => handleChange(col, e.target.value)}/>
+              )}
+            </div>
+          );
+        })}
 
         <div className="containerButtonPopUp">
           <button className="buttonPopUp" onClick={() => setShowCreatePopUp(false)}>Cancel</button>
