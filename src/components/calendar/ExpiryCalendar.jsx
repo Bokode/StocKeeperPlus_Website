@@ -17,7 +17,7 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { CircularProgress } from '@mui/material';
 
 import ProductList from './productList';
-import ServerDay from './serverDay';
+import customDay from './customDay';
 
 export default function ExpiryCalendar({UserID}) 
 {
@@ -147,7 +147,7 @@ export default function ExpiryCalendar({UserID})
                   value={selectedDay}
                   onChange={handleDateChange}
                   slots={{
-                    day: ServerDay,
+                    day: customDay,
                   }}
                   slotProps={{
                     day: {

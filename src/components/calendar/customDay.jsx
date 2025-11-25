@@ -2,7 +2,7 @@ import { PickersDay } from '@mui/x-date-pickers/PickersDay';
 import Badge from '@mui/material/Badge';
 import { getUrgencyColor } from './utils';
 
-export default function ServerDay(props) 
+export default function customDay(props) 
 {
     const { itemsByDate = new Map(), day, outsideCurrentMonth, ...other } = props;
 
