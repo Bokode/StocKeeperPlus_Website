@@ -39,8 +39,8 @@ function App() {
     })
       .then(response => response.json())
       .then(json => {
-        if (json && json.message) {
-          alert(json.message)
+        if (json && (json?.message || json[0]?.message)) {
+          alert(json?.message)
         } else {
           getAllInstanceFromDB();
         }
@@ -55,20 +55,43 @@ function App() {
       .catch(error => {setData(null); console.log(error)});
   }
 
-  function getInstanceFromDB(id) {
-    fetch('http://localhost:3001/' + listTable[indexTable] + '/get/' + id)
-      .then(response => response.json())
-      .then(json => {
-        if (json && json.message) {
-          console.error("Erreur :", json.message);
-          setData([]);
-        } else {
-          setData([json]);
-        }
-      })
-      .catch(error => { setData(null); console.log(error) });
-  }
+  function getInstanceFromDB(searchQuery) {
+    const parts = searchQuery.split(';');
+    if (parts.length === 1) {
+      if (listTable[indexTable] == "FoodUser" || listTable[indexTable] == "IngredientAmount" || listTable[indexTable] == "FoodStore") {
+        alert("Veuillez séparer les ID par un point virgule");
+      } else {
+        fetch('http://localhost:3001/' + listTable[indexTable] + '/get/' + searchQuery)
+          .then(response => response.json())
+          .then(json => {
+            if (json && (json?.message || json[0]?.message)) {
+              console.error("Erreur :", json?.message);
+              setData([]);
+            } else {
+              setData([json]);
+            }
+          })
+          .catch(error => { setData(null); console.log(error) });
+      }
+    } else if (parts.length === 2) {
+        const id1 = parts[0].trim();
+        const id2 = parts[1].trim();
 
+        fetch('http://localhost:3001/' + listTable[indexTable] + '/get/' + id1 + "/" + id2)
+          .then(response => response.json())
+          .then(json => {
+            if (json && (json?.message || json[0]?.message)) {
+              console.error("Erreur :", json?.message);
+              setData([]);
+            } else {
+              setData([json]);
+            }
+          })
+          .catch(error => { setData(null); console.log(error) });
+      } else {
+        alert('Maximum deux ID');
+      }
+    }
 
   function updateInstanceFromDB(dataInstance) {
     fetch('http://localhost:3001/' + listTable[indexTable], {
@@ -80,8 +103,8 @@ function App() {
     })
       .then(response => response.json())
       .then(json => {
-        if (json && json.message) {
-          alert(json.message)
+        if (json && (json?.message || json[0]?.message)) {
+          alert(json?.message)
         } else {
           getAllInstanceFromDB();
         }
