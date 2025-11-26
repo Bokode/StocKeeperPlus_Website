@@ -7,8 +7,8 @@ function SearchBar({ list, index, getInstanceFromDB, getAllInstanceFromDB }) {
   const [searchValue, setSearchValue] = useState("");
   const placeholder = "Search an instance of " + list[index];
 
-  function handleSearch(search) {
-    if (search.trim() !== "") {
+  function handleSearch() {
+    if (searchValue.trim() !== "") {
       getInstanceFromDB(searchValue);
     } else {
       getAllInstanceFromDB();
@@ -17,11 +17,7 @@ function SearchBar({ list, index, getInstanceFromDB, getAllInstanceFromDB }) {
   
   const handleEnterKey = (e) => {
     if (e.key === "Enter") {
-      if (searchValue.trim() !== "") {
-        getInstanceFromDB(searchValue);
-      } else {
-        getAllInstanceFromDB();
-      }
+      handleSearch();
     }
   };
 
@@ -29,7 +25,7 @@ function SearchBar({ list, index, getInstanceFromDB, getAllInstanceFromDB }) {
     <div className="containerSearchBar">
       <FontAwesomeIcon icon={faBars} onClick={() => getAllInstanceFromDB()}/>
       <input className="inputSearchBar" placeholder={placeholder} value={searchValue} onChange={(e) => setSearchValue(e.target.value)} onKeyDown={handleEnterKey}/>
-      <FontAwesomeIcon icon={faMagnifyingGlass} className="searchIcon" onClick={() => {handleSearch(searchValue)}}/>
+      <FontAwesomeIcon icon={faMagnifyingGlass} className="searchIcon" onClick={() => {handleSearch()}}/>
     </div>
   );
 }
