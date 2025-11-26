@@ -74,7 +74,7 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
         const res = await fetch('http://localhost:3001/foodUser/', { 
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user_mail: `${UserID}`, food_id: item.id }),
+            body: JSON.stringify({ user_mail: `${UserID}`, food: item.id }),
         });
 
         if (!res.ok) {
