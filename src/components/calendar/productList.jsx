@@ -49,7 +49,7 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
             {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_mail: `${UserID}`, food_id: item.id, quantity: newQtt }),
+                body: JSON.stringify({ user_mail: `${UserID}`, food: item.id, quantity: newQtt, expirationdate: item.expirationDate }),
             });
         
             if (!res.ok) 
