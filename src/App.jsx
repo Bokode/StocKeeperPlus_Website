@@ -30,7 +30,6 @@ function App() {
   }
 
   function createInstanceFromDB(dataInstance) {
-    console.log(dataInstance);
     fetch('http://localhost:3001/' + listTable[indexTable], {
       method: 'POST',
       headers: {
@@ -40,8 +39,8 @@ function App() {
     })
       .then(response => response.json())
       .then(json => {
-        if (json && json[0].message) {
-          alert(json[0].message)
+        if (json && json.message) {
+          alert(json.message)
         } else {
           getAllInstanceFromDB();
         }
@@ -60,7 +59,7 @@ function App() {
     fetch('http://localhost:3001/' + listTable[indexTable] + '/get/' + id)
       .then(response => response.json())
       .then(json => {
-        if (json && json[0].message) {
+        if (json && json.message) {
           console.error("Erreur :", json.message);
           setData([]);
         } else {
@@ -81,8 +80,8 @@ function App() {
     })
       .then(response => response.json())
       .then(json => {
-        if (json && json[0].message) {
-          alert(json[0].message)
+        if (json && json.message) {
+          alert(json.message)
         } else {
           getAllInstanceFromDB();
         }
