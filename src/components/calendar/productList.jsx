@@ -49,7 +49,7 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
             {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_mail: `${UserID}`, food_id: item.id, quantity: newQtt }),
+                body: JSON.stringify({ user_mail: `${UserID}`, food: item.id, quantity: newQtt, expirationdate: item.expirationDate }),
             });
         
             if (!res.ok) 
@@ -74,7 +74,7 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
         const res = await fetch('http://localhost:3001/foodUser/', { 
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user_mail: `${UserID}`, food_id: item.id }),
+            body: JSON.stringify({ user_mail: `${UserID}`, food: item.id }),
         });
 
         if (!res.ok) {
