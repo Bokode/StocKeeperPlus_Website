@@ -101,10 +101,9 @@ function App() {
       },
       body: JSON.stringify(dataInstance)
     })
-      .then(response => response.json())
-      .then(json => {
-        if (json && (json?.message || json[0]?.message)) {
-          alert(json?.message)
+      .then(response => {
+        if (!response.ok) {
+          alert("Problème")
         } else {
           getAllInstanceFromDB();
         }
