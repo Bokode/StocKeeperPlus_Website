@@ -112,19 +112,19 @@ function App() {
   }
 
 
-  function deleteInstanceFromDB(id) {
-    const firstColumnKey = Object.keys(data[0])[0];
-
+  function deleteInstanceFromDB(idObj) {
     fetch('http://localhost:3001/' + listTable[indexTable], {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ [firstColumnKey]: id })
+      body: JSON.stringify(idObj)
     })
-      .then(response => {if (!response.ok) throw new Error('Failed to delete');})
+      .then(response => {
+        if (!response.ok) throw new Error('Delete failed');
+      })
       .then(() => getAllInstanceFromDB())
-      .catch(error => { setData(null); console.log(error) });
+      .catch(error => { console.log(error); });
   }
 
   return (

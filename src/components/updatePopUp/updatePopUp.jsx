@@ -1,8 +1,7 @@
 import './updatePopUp.css'
 import { useState } from 'react';
 
-function UpdatePopUp({ setShowUpdatePopUp, instanceAction, dataLabel, updateInstanceFromDB }) {
-  const lockedFields = ["mail", "id", "recipe", "food", "store", "user_mail"];
+function UpdatePopUp({ setShowUpdatePopUp, instanceAction, dataLabel, updateInstanceFromDB, lockedFields }) {
   
   const [formData, setFormData] = useState(() => {
     const initialData = {};
