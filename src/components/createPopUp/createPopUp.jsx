@@ -1,8 +1,8 @@
 import './createPopUp.css'
 import { useState } from "react";
 
-function CreatePopUp({ setShowCreatePopUp, columnsAdd, createInstanceFromDB }) {
-  const filteredColumns = columnsAdd.filter(c => c !== "id");
+function CreatePopUp({ setShowCreatePopUp, columns, createInstanceFromDB }) {
+  const filteredColumns = columns.filter(c => c !== "id");
 
   const initialForm = {};
     filteredColumns.forEach(c => {
