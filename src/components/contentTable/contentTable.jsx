@@ -2,14 +2,18 @@ import './contentTable.css'
 import ConfirmationDeletePopUp from '../confirmationDeletePopUp/confirmationDeletePopUp';
 import ExpiryCalendar from '../calendar/ExpiryCalendar';
 import ReadPopUp from '../readPopUp/readPopUp';
+import UpdatePopUp from '../updatePopUp/updatePopUp';
 import { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPencil, faTrash, faCalendar } from '@fortawesome/free-solid-svg-icons';
-import UpdatePopUp from '../updatePopUp/updatePopUp';
 
-function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, updateInstanceFromDB }) {
-  const lockedFields = ["mail", "id", "recipe", "food", "store", "user_mail"];
+function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, updateInstanceFromDB, columns, metadata }) {
+  const lockedFields = [];
+  metadata.forEach(table => {lockedFields.push(...table.primaryKeys);});
   const [identifierObject, setIdentifierObject] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [calendarUserID, setCalendarUserID] = useState(null);
+
   const [showConfirmationDeletePopUp, setShowConfirmationDeletePopUp] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showReadPopUp, setShowReadPopUp] = useState(false);
@@ -24,8 +28,6 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
     );
   }
 
-  const columns = Object.keys(data[0]);
-
   const getIdentifierObject = (row) => {
     const obj = {};
     lockedFields.forEach((key) => {
@@ -34,14 +36,6 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
       }
     });
     return obj;
-  };
-
-  const findInstance = () => {
-    return data.find(row =>
-      Object.entries(identifierObject).every(
-        ([key, val]) => row[key] === val
-      )
-    );
   };
 
   return (
@@ -68,6 +62,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
                   onClick={() => {
                     setIdentifierObject(getIdentifierObject(row));
                     setShowReadPopUp(true);
+                    setSelectedRow(row);;
                   }}
                 >
                   <FontAwesomeIcon icon={faEye} />
@@ -78,6 +73,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
                   onClick={() => {
                     setIdentifierObject(getIdentifierObject(row));
                     setShowUpdatePopUp(true);
+                    setSelectedRow(row);
                   }}
                 >
                   <FontAwesomeIcon icon={faPencil} />
@@ -96,7 +92,10 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
                 {columns.includes("mail") && (
                   <button
                     className='buttonAction'
-                    onClick={() => setShowCalendar(!showCalendar)}
+                    onClick={() => {
+                      setCalendarUserID(row.mail);
+                      setShowCalendar(!showCalendar);
+                    }}
                   >
                     <FontAwesomeIcon icon={faCalendar} />
                   </button>
@@ -117,13 +116,13 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
       )}
 
       {showCalendar && (
-        <ExpiryCalendar UserID={data[0].mail} />
+        <ExpiryCalendar UserID={calendarUserID} />
       )}
 
       {showReadPopUp && (
         <ReadPopUp
           setShowReadPopUp={setShowReadPopUp}
-          instanceAction={findInstance()}
+          instanceAction={selectedRow}
           dataLabel={columns}
         />
       )}
@@ -131,7 +130,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
       {showUpdatePopUp && (
         <UpdatePopUp
           setShowUpdatePopUp={setShowUpdatePopUp}
-          instanceAction={findInstance()}
+          instanceAction={selectedRow}
           dataLabel={columns}
           updateInstanceFromDB={updateInstanceFromDB}
           lockedFields={lockedFields}
