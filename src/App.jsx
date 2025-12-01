@@ -2,40 +2,137 @@ import './App.css'
 import ContentTable from './components/contentTable/contentTable';
 import PageChanger from './components/pageChanger/pageChanger';
 import Topbar from './components/topBar/topBar';
+import CreatePopUp from './components/createPopUp/createPopUp';
 import { useState, useEffect } from 'react';
-
-
 
 function App() {
   const listTable = ["Food", "FoodUser", "User", "IngredientAmount", "Recipe", "Store", "FoodStore"];
-  const listNumber = [5, 10, 20, 51];
+  const listNumber = [5, 10, 20, 50];
   const [indexTable, setIndexTable] = useState(0);
   const [indexNumber, setIndexNumber] = useState(0);
   const [startItemIndex, setStartItemIndex] = useState(0);
+  const [columnsAdd, setColumnsAdd] = useState(null);
   const [data, setData] = useState(null);
+  const [showCreatePopUp, setShowCreatePopUp] = useState(false);
 
   useEffect(() => {
-    handleClick()
+    getAllInstanceFromDB()
+    getTableColumns().then(cols => setColumnsAdd(cols));
   }, [indexTable]);
 
   function onPageChange(i) {
     setStartItemIndex((i-1)*listNumber[indexNumber]);
   }
 
-  function handleClick() {
-    const tableToSearch = listTable[indexTable][0].toLocaleLowerCase() + listTable[indexTable].slice(1);
+  function getTableColumns() {
+    return fetch('http://localhost:3001/' + listTable[indexTable] + '/columns')
+      .then(res => res.json());
+  }
 
-    fetch('http://localhost:3001/' + tableToSearch + '/all')
+  function createInstanceFromDB(dataInstance) {
+    fetch('http://localhost:3001/' + listTable[indexTable], {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dataInstance)
+    })
+      .then(response => response.json())
+      .then(json => {
+        if (json && (json?.message || json[0]?.message)) {
+          alert(json?.message)
+        } else {
+          getAllInstanceFromDB();
+        }
+      })
+      .catch(error => console.log(error));
+  }
+
+  function getAllInstanceFromDB() {
+    fetch('http://localhost:3001/' + listTable[indexTable] + '/all')
       .then(response => response.json())
       .then(json => setData(json))
       .catch(error => {setData(null); console.log(error)});
   }
 
+  function getInstanceFromDB(searchQuery) {
+    const parts = searchQuery.split(';');
+    if (parts.length === 1) {
+      if (listTable[indexTable] == "FoodUser" || listTable[indexTable] == "IngredientAmount" || listTable[indexTable] == "FoodStore") {
+        alert("Veuillez séparer les ID par un point virgule");
+      } else {
+        fetch('http://localhost:3001/' + listTable[indexTable] + '/get/' + searchQuery)
+          .then(response => response.json())
+          .then(json => {
+            if (json && (json?.message || json[0]?.message)) {
+              console.error("Erreur :", json?.message);
+              setData([]);
+            } else {
+              setData([json]);
+            }
+          })
+          .catch(error => { setData(null); console.log(error) });
+      }
+    } else if (parts.length === 2) {
+        const id1 = parts[0].trim();
+        const id2 = parts[1].trim();
+
+        fetch('http://localhost:3001/' + listTable[indexTable] + '/get/' + id1 + "/" + id2)
+          .then(response => response.json())
+          .then(json => {
+            if (json && (json?.message || json[0]?.message)) {
+              console.error("Erreur :", json?.message);
+              setData([]);
+            } else {
+              setData([json]);
+            }
+          })
+          .catch(error => { setData(null); console.log(error) });
+      } else {
+        alert('Maximum deux ID');
+      }
+    }
+
+  function updateInstanceFromDB(dataInstance) {
+    fetch('http://localhost:3001/' + listTable[indexTable], {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dataInstance)
+    })
+      .then(response => {
+        if (!response.ok) {
+          alert("Problème")
+        } else {
+          getAllInstanceFromDB();
+        }
+      })
+      .catch(error => console.log(error));
+  }
+
+
+  function deleteInstanceFromDB(idObj) {
+    fetch('http://localhost:3001/' + listTable[indexTable], {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(idObj)
+    })
+      .then(response => {
+        if (!response.ok) throw new Error('Delete failed');
+      })
+      .then(() => getAllInstanceFromDB())
+      .catch(error => { console.log(error); });
+  }
+
   return (
     <div className='containerApp'>
-      <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} handleClick={handleClick}/>
-      <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex}/>
+      <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} getInstanceFromDB={getInstanceFromDB} getAllInstanceFromDB={getAllInstanceFromDB} setShowCreatePopUp={setShowCreatePopUp}/>
+      <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex} deleteInstanceFromDB={deleteInstanceFromDB} updateInstanceFromDB={updateInstanceFromDB}   columnsAdd={columnsAdd}/>
       <PageChanger numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0} onPageChange={onPageChange}/>
+      {showCreatePopUp && (<CreatePopUp setShowCreatePopUp={setShowCreatePopUp} columnsAdd={columnsAdd} createInstanceFromDB={createInstanceFromDB}/>)} 
     </div>
   )
 }

@@ -1,0 +1,59 @@
+.backgroundPopUp {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    min-height: 100%;
+    background-color: rgba(128, 128, 128, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.containerContentPopUp {
+    background-color: #eeeeee;
+    color: black;
+    font-weight: 500;
+    min-width: 450px;
+    padding: 15px 5px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: left;
+}
+
+.containerReadInstance {
+    display: flex;
+}
+
+.textReadInstance {
+    margin: 5px;
+    min-width: 100px;
+}
+
+.inputReadInstance {
+    margin: 5px;
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+}
+
+.inputDisabled {
+  background-color: #e5e5e5;
+  cursor: not-allowed;
+}
+
+.containerButtonPopUp {
+    margin-top: 25px;
+    margin-inline: auto;
+    width: 250px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.buttonPopUp:hover {
+    border: none;
+    background-color: grey;
+}
