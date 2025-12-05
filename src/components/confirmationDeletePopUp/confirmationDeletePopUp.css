@@ -1,0 +1,37 @@
+.backgroundPopUp {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    min-height: 100%;
+    background-color: rgba(128, 128, 128, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.containerConfirmationPopUp {
+    background-color: #eeeeee;
+    color: black;
+    font-weight: 500;
+    width: 450px;
+    height: 110px;
+    padding: 15px 0;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.containerDeleteButtonPopUp {
+    width: 250px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.buttonPopUp:hover {
+    border: none;
+    background-color: grey;
+}
