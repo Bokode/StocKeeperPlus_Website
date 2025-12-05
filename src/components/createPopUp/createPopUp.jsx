@@ -9,7 +9,6 @@ function CreatePopUp({ setShowCreatePopUp, columns, createInstanceFromDB }) {
     initialForm[c] = (c === "isadmin") ? false : "";
   });
 
-
   const [formData, setFormData] = useState(initialForm);
 
   const handleChange = (key, value) => {
