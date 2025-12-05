@@ -60,9 +60,8 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
                 <button
                   className='buttonAction'
                   onClick={() => {
-                    setIdentifierObject(getIdentifierObject(row));
+                    setSelectedRow(row);
                     setShowReadPopUp(true);
-                    setSelectedRow(row);;
                   }}
                 >
                   <FontAwesomeIcon icon={faEye} />
@@ -71,9 +70,8 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
                 <button
                   className='buttonAction'
                   onClick={() => {
-                    setIdentifierObject(getIdentifierObject(row));
-                    setShowUpdatePopUp(true);
                     setSelectedRow(row);
+                    setShowUpdatePopUp(true);
                   }}
                 >
                   <FontAwesomeIcon icon={faPencil} />
