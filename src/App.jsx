@@ -6,27 +6,33 @@ import CreatePopUp from './components/createPopUp/createPopUp';
 import { useState, useEffect } from 'react';
 
 function App() {
-  const listTable = ["Food", "FoodUser", "User", "IngredientAmount", "Recipe", "Store", "FoodStore"];
   const listNumber = [5, 10, 20, 50];
   const [indexTable, setIndexTable] = useState(0);
   const [indexNumber, setIndexNumber] = useState(0);
   const [startItemIndex, setStartItemIndex] = useState(0);
-  const [columnsAdd, setColumnsAdd] = useState(null);
+  const [metadata, setMetadata] = useState(null);
   const [data, setData] = useState(null);
+  const [columns, setColumns] = useState(null);
   const [showCreatePopUp, setShowCreatePopUp] = useState(false);
 
   useEffect(() => {
-    getAllInstanceFromDB()
-    getTableColumns().then(cols => setColumnsAdd(cols));
-  }, [indexTable]);
+    fetch("http://localhost:3001/metadata")
+      .then(res => res.json())
+      .then(json => setMetadata(json));
+  }, []);
+  
+  const listTable = metadata ? metadata.map(t => t.name) : [];
+
+  useEffect(() => {
+  getAllInstanceFromDB();
+  if (metadata) {
+    setColumns(metadata[indexTable].columns.filter(col => col !== "password"));
+  }
+}, [indexTable, metadata]);
+
 
   function onPageChange(i) {
     setStartItemIndex((i-1)*listNumber[indexNumber]);
-  }
-
-  function getTableColumns() {
-    return fetch('http://localhost:3001/' + listTable[indexTable] + '/columns')
-      .then(res => res.json());
   }
 
   function createInstanceFromDB(dataInstance) {
@@ -56,42 +62,25 @@ function App() {
   }
 
   function getInstanceFromDB(searchQuery) {
-    const parts = searchQuery.split(';');
-    if (parts.length === 1) {
-      if (listTable[indexTable] == "FoodUser" || listTable[indexTable] == "IngredientAmount" || listTable[indexTable] == "FoodStore") {
-        alert("Veuillez séparer les ID par un point virgule");
-      } else {
-        fetch('http://localhost:3001/' + listTable[indexTable] + '/get/' + searchQuery)
-          .then(response => response.json())
-          .then(json => {
-            if (json && (json?.message || json[0]?.message)) {
-              console.error("Erreur :", json?.message);
-              setData([]);
-            } else {
-              setData([json]);
-            }
-          })
-          .catch(error => { setData(null); console.log(error) });
-      }
-    } else if (parts.length === 2) {
-        const id1 = parts[0].trim();
-        const id2 = parts[1].trim();
+    const nbPrimaryKeys = metadata[indexTable].primaryKeys.length;
+    const parts = searchQuery.split(";").map(p => p.trim());
 
-        fetch('http://localhost:3001/' + listTable[indexTable] + '/get/' + id1 + "/" + id2)
-          .then(response => response.json())
-          .then(json => {
-            if (json && (json?.message || json[0]?.message)) {
-              console.error("Erreur :", json?.message);
-              setData([]);
-            } else {
-              setData([json]);
-            }
-          })
-          .catch(error => { setData(null); console.log(error) });
-      } else {
-        alert('Maximum deux ID');
-      }
+    if (parts.length !== nbPrimaryKeys) {
+      return alert(`Cette table nécessite ${nbPrimaryKeys} ID\nSi plusieurs ID, ils doivent être séparés par un point-virgule`);
+    } else {
+      fetch('http://localhost:3001/' + listTable[indexTable] + '/get/' + (nbPrimaryKeys === 1 ? parts[0] : parts[0] + "/" + parts[1]))
+        .then(response => response.json())
+        .then(json => {
+          if (json && (json?.message || json[0]?.message)) {
+            console.error("Erreur :", json?.message);
+            setData([]);
+          } else {
+            setData([json]);
+          }
+        })
+        .catch(error => { setData(null); console.log(error) });
     }
+  }
 
   function updateInstanceFromDB(dataInstance) {
     fetch('http://localhost:3001/' + listTable[indexTable], {
@@ -127,12 +116,14 @@ function App() {
       .catch(error => { console.log(error); });
   }
 
+  if (!metadata) return <div>Chargement...</div>;
+
   return (
     <div className='containerApp'>
       <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} getInstanceFromDB={getInstanceFromDB} getAllInstanceFromDB={getAllInstanceFromDB} setShowCreatePopUp={setShowCreatePopUp}/>
-      <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex} deleteInstanceFromDB={deleteInstanceFromDB} updateInstanceFromDB={updateInstanceFromDB}   columnsAdd={columnsAdd}/>
+      <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex} deleteInstanceFromDB={deleteInstanceFromDB} updateInstanceFromDB={updateInstanceFromDB} columns={columns} metadata={metadata}/>
       <PageChanger numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0} onPageChange={onPageChange}/>
-      {showCreatePopUp && (<CreatePopUp setShowCreatePopUp={setShowCreatePopUp} columnsAdd={columnsAdd} createInstanceFromDB={createInstanceFromDB}/>)} 
+      {showCreatePopUp && (<CreatePopUp setShowCreatePopUp={setShowCreatePopUp} columns={metadata[indexTable].columns} createInstanceFromDB={createInstanceFromDB}/>)} 
     </div>
   )
 }
