@@ -1,5 +1,6 @@
 import './createPopUp.css';
 import IngredientsPopUp from "../ingredientsPopUp/ingredientsPopUp";
+import ReadIngredientsPopUp from '../readPopUp/readIngredientsIntegration';
 import { useState } from "react";
 
 function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB }) {
