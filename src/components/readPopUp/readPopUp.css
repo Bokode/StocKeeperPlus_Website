@@ -39,3 +39,113 @@
     border: none;
     background-color: grey;
 }
+
+/* Ajouter ces styles à votre readPopUp.css existant */
+
+.containerContentPopUp h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.containerContentPopUp h3 {
+  margin: 15px 0 10px 0;
+  color: #555;
+  font-size: 1.2em;
+}
+
+.textReadInstance strong {
+  color: #495057;
+  font-weight: 600;
+}
+
+/* Section des ingrédients */
+.ingredientsSection {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 2px solid #e9ecef;
+}
+
+.ingredientsReadList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ingredientReadItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+  transition: transform 0.2s;
+}
+
+.ingredientReadItem:hover {
+  transform: translateX(3px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.ingredientReadLabel {
+  flex: 1;
+  font-weight: 500;
+  color: #333;
+  font-size: 1em;
+}
+
+.ingredientReadQuantity {
+  padding: 4px 12px;
+  background: #007bff;
+  color: white;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+.ingredientReadDiet {
+  padding: 4px 10px;
+  background: #e7f3ff;
+  color: #0066cc;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.ingredientReadNutriscore {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.85em;
+  text-transform: uppercase;
+}
+
+.nutriscore-a {
+  background: #038141;
+  color: white;
+}
+
+.nutriscore-b {
+  background: #85bb2f;
+  color: white;
+}
+
+.nutriscore-c {
+  background: #fecb02;
+  color: #333;
+}
+
+.nutriscore-d {
+  background: #ee8100;
+  color: white;
+}
+
+.nutriscore-e {
+  background: #e63e11;
+  color: white;
+}

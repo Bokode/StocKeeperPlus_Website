@@ -1,3 +1,163 @@
+// import './contentTable.css'
+// import ConfirmationDeletePopUp from '../confirmationDeletePopUp/confirmationDeletePopUp';
+// import ExpiryCalendar from '../calendar/ExpiryCalendar';
+// import ReadPopUp from '../readPopUp/readPopUp';
+// import UpdatePopUp from '../updatePopUp/updatePopUp';
+// import { useState } from 'react';
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faEye, faPencil, faTrash, faCalendar } from '@fortawesome/free-solid-svg-icons';
+
+// function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, updateInstanceFromDB, columns, metadata, currentTable }) {
+//   const lockedFields = [];
+//   metadata.forEach(table => {lockedFields.push(...table.primaryKeys);});
+//   const [identifierObject, setIdentifierObject] = useState(null);
+//   const [selectedRow, setSelectedRow] = useState(null);
+//   const [calendarUserID, setCalendarUserID] = useState(null);
+
+//   const [showConfirmationDeletePopUp, setShowConfirmationDeletePopUp] = useState(false);
+//   const [showCalendar, setShowCalendar] = useState(false);
+//   const [showReadPopUp, setShowReadPopUp] = useState(false);
+//   const [showUpdatePopUp, setShowUpdatePopUp] = useState(false);
+
+//   if (!data || data.length === 0) {
+//     return (
+//       <>
+//         <p className='waitMessage'>Oups — on n'a rien trouvé ici. 😢</p>
+//         <p className='waitMessage'>Essayez une autre recherche</p>
+//       </>
+//     );
+//   }
+
+//   const getIdentifierObject = (row) => {
+//     const obj = {};
+//     lockedFields.forEach((key) => {
+//       if (row[key] !== undefined) {
+//         obj[key] = row[key];
+//       }
+//     });
+//     return obj;
+//   };
+
+//   // Fonction pour charger les détails complets d'une recette
+//   const handleEditRecipe = async (row) => {
+//     if (currentTable === "Recipe") {
+//       try {
+//         // Charger la recette complète avec les ingrédients
+//         const response = await fetch(`http://localhost:3001/Recipe/get/${row.id}`);
+//         const fullRecipe = await response.json();
+//         setSelectedRow(fullRecipe);
+//         setShowUpdatePopUp(true);
+//       } catch (error) {
+//         console.error("Erreur lors du chargement de la recette:", error);
+//         alert("Impossible de charger les détails de la recette");
+//       }
+//     } else {
+//       // Pour les autres tables, pas besoin de charger plus de données
+//       setSelectedRow(row);
+//       setShowUpdatePopUp(true);
+//     }
+//   };
+
+//   return (
+//     <>
+//       <table className='containerTable'>
+//         <tbody className='bodyTable'>
+//           <tr className='columnTable'>
+//             {columns.map(col => (
+//               <th key={col} className='headerColumn'>{col}</th>
+//             ))}
+//             <th className='headerColumn actionColumn'>action</th>
+//           </tr>
+//           {data.slice(startItemIndex, startItemIndex + viewNumber).map((row, i) => (
+//             <tr key={i} className='columnTable'>
+//               {columns.map(col => {
+//                 let value = row[col];
+//                 if (typeof value === "boolean") value = value ? "Oui" : "Non";
+//                 return <td key={col} className='contentColumn'>{value}</td>;
+//               })}
+
+//               <td className='contentColumn actionColumn'>
+//                 <button
+//                   className='buttonAction'
+//                   onClick={() => {
+//                     setSelectedRow(row);
+//                     setShowReadPopUp(true);
+//                   }}
+//                 >
+//                   <FontAwesomeIcon icon={faEye} />
+//                 </button>
+
+//                 <button
+//                   className='buttonAction'
+//                   onClick={() => handleEditRecipe(row)}
+//                 >
+//                   <FontAwesomeIcon icon={faPencil} />
+//                 </button>
+
+//                 <button
+//                   className='buttonAction'
+//                   onClick={() => {
+//                     setIdentifierObject(getIdentifierObject(row));
+//                     setShowConfirmationDeletePopUp(true);
+//                   }}
+//                 >
+//                   <FontAwesomeIcon icon={faTrash} />
+//                 </button>
+
+//                 {columns.includes("mail") && (
+//                   <button
+//                     className='buttonAction'
+//                     onClick={() => {
+//                       setCalendarUserID(row.mail);
+//                       setShowCalendar(!showCalendar);
+//                     }}
+//                   >
+//                     <FontAwesomeIcon icon={faCalendar} />
+//                   </button>
+//                 )}
+//               </td>
+//             </tr>
+//           ))}
+
+//         </tbody>
+//       </table>
+
+//       {showConfirmationDeletePopUp && (
+//         <ConfirmationDeletePopUp
+//           setShowConfirmationDeletePopUp={setShowConfirmationDeletePopUp}
+//           idInstanceAction={identifierObject}
+//           deleteInstanceFromDB={deleteInstanceFromDB}
+//         />
+//       )}
+
+//       {showCalendar && (
+//         <ExpiryCalendar UserID={calendarUserID} />
+//       )}
+
+//       {showReadPopUp && (
+//         <ReadPopUp
+//           setShowReadPopUp={setShowReadPopUp}
+//           instanceAction={selectedRow}
+//           dataLabel={columns}
+//         />
+//       )}
+
+//       {showUpdatePopUp && (
+//         <UpdatePopUp
+//           setShowUpdatePopUp={setShowUpdatePopUp}
+//           instanceAction={selectedRow}
+//           dataLabel={columns}
+//           updateInstanceFromDB={updateInstanceFromDB}
+//           lockedFields={lockedFields}
+//           table={currentTable}
+//         />
+//       )}
+//     </>
+//   );
+// }
+
+// export default ContentTable;
+
 import './contentTable.css'
 import ConfirmationDeletePopUp from '../confirmationDeletePopUp/confirmationDeletePopUp';
 import ExpiryCalendar from '../calendar/ExpiryCalendar';
@@ -7,7 +167,7 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPencil, faTrash, faCalendar } from '@fortawesome/free-solid-svg-icons';
 
-function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, updateInstanceFromDB, columns, metadata }) {
+function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, updateInstanceFromDB, columns, metadata, currentTable }) {
   const lockedFields = [];
   metadata.forEach(table => {lockedFields.push(...table.primaryKeys);});
   const [identifierObject, setIdentifierObject] = useState(null);
@@ -38,6 +198,46 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
     return obj;
   };
 
+  // Fonction pour charger les détails complets d'une recette
+  const handleEditRecipe = async (row) => {
+    if (currentTable === "Recipe") {
+      try {
+        // Charger la recette complète avec les ingrédients
+        const response = await fetch(`http://localhost:3001/Recipe/get/${row.id}`);
+        const fullRecipe = await response.json();
+        setSelectedRow(fullRecipe);
+        setShowUpdatePopUp(true);
+      } catch (error) {
+        console.error("Erreur lors du chargement de la recette:", error);
+        alert("Impossible de charger les détails de la recette");
+      }
+    } else {
+      // Pour les autres tables, pas besoin de charger plus de données
+      setSelectedRow(row);
+      setShowUpdatePopUp(true);
+    }
+  };
+
+  // Fonction pour voir les détails (avec ingrédients pour les recettes)
+  const handleViewDetails = async (row) => {
+    if (currentTable === "Recipe") {
+      try {
+        // Charger la recette complète avec les ingrédients
+        const response = await fetch(`http://localhost:3001/Recipe/get/${row.id}`);
+        const fullRecipe = await response.json();
+        setSelectedRow(fullRecipe);
+        setShowReadPopUp(true);
+      } catch (error) {
+        console.error("Erreur lors du chargement de la recette:", error);
+        alert("Impossible de charger les détails de la recette");
+      }
+    } else {
+      // Pour les autres tables, pas besoin de charger plus de données
+      setSelectedRow(row);
+      setShowReadPopUp(true);
+    }
+  };
+
   return (
     <>
       <table className='containerTable'>
@@ -59,20 +259,14 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
               <td className='contentColumn actionColumn'>
                 <button
                   className='buttonAction'
-                  onClick={() => {
-                    setSelectedRow(row);
-                    setShowReadPopUp(true);
-                  }}
+                  onClick={() => handleViewDetails(row)}
                 >
                   <FontAwesomeIcon icon={faEye} />
                 </button>
 
                 <button
                   className='buttonAction'
-                  onClick={() => {
-                    setSelectedRow(row);
-                    setShowUpdatePopUp(true);
-                  }}
+                  onClick={() => handleEditRecipe(row)}
                 >
                   <FontAwesomeIcon icon={faPencil} />
                 </button>
@@ -122,6 +316,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
           setShowReadPopUp={setShowReadPopUp}
           instanceAction={selectedRow}
           dataLabel={columns}
+          table={currentTable}
         />
       )}
 
@@ -132,6 +327,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
           dataLabel={columns}
           updateInstanceFromDB={updateInstanceFromDB}
           lockedFields={lockedFields}
+          table={currentTable}
         />
       )}
     </>
