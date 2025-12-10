@@ -31,12 +31,6 @@ function UpdatePopUp({ setShowUpdatePopUp, instanceAction, dataLabel, updateInst
   };
 
   const handleUpdateRecipe = () => {
-    // Vérifier que tous les champs obligatoires sont remplis
-    if (!formData.label || !formData.label.trim()) {
-      alert("Le nom de la recette est obligatoire");
-      return;
-    }
-
     // Détecter les ingrédients ajoutés/modifiés et supprimés
     const ingredientsToAddOrUpdate = [];
     const ingredientsToRemove = [];

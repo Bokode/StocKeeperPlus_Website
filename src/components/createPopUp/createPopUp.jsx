@@ -19,18 +19,6 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
   };
 
   const handleCreateRecipe = () => {
-    // Vérifier que tous les champs obligatoires sont remplis
-    if (!formData.label || !formData.label.trim()) {
-      alert("Le nom de la recette est obligatoire");
-      return;
-    }
-
-    // Vérifier qu'au moins un ingrédient est sélectionné
-    if (ingredients.length === 0) {
-      alert("Veuillez sélectionner au moins un ingrédient");
-      return;
-    }
-
     // Préparer les données pour l'envoi
     const recipeData = {
       label: formData.label,
