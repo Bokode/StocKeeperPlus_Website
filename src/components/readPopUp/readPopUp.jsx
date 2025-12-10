@@ -15,7 +15,7 @@ function ReadPopUp({ setShowReadPopUp, instanceAction, dataLabel, table }) {
   return (
     <div className='backgroundPopUp' onClick={() => setShowReadPopUp(false)}>
       <div className='containerContentPopUp' onClick={(e) => e.stopPropagation()}>
-        <h2>Détails {table}</h2>
+        <h2>Details {table}</h2>
         
         {dataLabel.map((key) => {
           let value = instanceAction[key];
@@ -31,7 +31,7 @@ function ReadPopUp({ setShowReadPopUp, instanceAction, dataLabel, table }) {
         {/* Afficher les ingrédients pour les recettes */}
         {table === "Recipe" && ingredients.length > 0 && (
           <div className="ingredientsSection">
-            <h3>Ingrédients ({ingredients.length})</h3>
+            <h3>Ingredients ({ingredients.length})</h3>
             <div className="ingredientsReadList">
               {ingredients.map((ing, index) => (
                 <div key={index} className="ingredientReadItem">
