@@ -121,9 +121,9 @@ function App() {
   return (
     <div className='containerApp'>
       <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} getInstanceFromDB={getInstanceFromDB} getAllInstanceFromDB={getAllInstanceFromDB} setShowCreatePopUp={setShowCreatePopUp}/>
-      <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex} deleteInstanceFromDB={deleteInstanceFromDB} updateInstanceFromDB={updateInstanceFromDB} columns={columns} metadata={metadata}/>
+      <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex} deleteInstanceFromDB={deleteInstanceFromDB} updateInstanceFromDB={updateInstanceFromDB} columns={columns} metadata={metadata} currentTable={listTable[indexTable]}/>
       <PageChanger numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0} onPageChange={onPageChange}/>
-      {showCreatePopUp && (<CreatePopUp setShowCreatePopUp={setShowCreatePopUp} columns={metadata[indexTable].columns} createInstanceFromDB={createInstanceFromDB}/>)} 
+      {showCreatePopUp && (<CreatePopUp setShowCreatePopUp={setShowCreatePopUp} columns={metadata[indexTable].columns} table={metadata[indexTable].name} createInstanceFromDB={createInstanceFromDB}/>)} 
     </div>
   )
 }
