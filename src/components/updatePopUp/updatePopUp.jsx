@@ -89,7 +89,7 @@ function UpdatePopUp({ setShowUpdatePopUp, instanceAction, dataLabel, updateInst
   return (
     <div className='backgroundPopUp' onClick={() => setShowUpdatePopUp(false)}>
       <div className='containerContentPopUp' onClick={(e) => e.stopPropagation()}>
-        <h2>Modifier {table}</h2>
+        <h2>Update {table}</h2>
         
         {dataLabel.map((key) => {
           const isLocked = lockedFields.includes(key);
@@ -122,7 +122,7 @@ function UpdatePopUp({ setShowUpdatePopUp, instanceAction, dataLabel, updateInst
         {table === "Recipe" && (
           <div className="ingredientsPreview">
             <p className="textReadInstance">
-              Ingrédients : {ingredients.length} actuel(s)
+              Actual ingredients : {ingredients.length}
             </p>
             {ingredients.length > 0 && (
               <div className="ingredientsList">
@@ -145,7 +145,7 @@ function UpdatePopUp({ setShowUpdatePopUp, instanceAction, dataLabel, updateInst
               className='buttonPopUp buttonIngredients' 
               onClick={() => setShowIngredientsPopUp(true)}
             >
-              Gérer ingrédients
+              Manage ingredients
             </button>
           )}
           <button className='buttonPopUp buttonUpdate' onClick={handleUpdate}>
