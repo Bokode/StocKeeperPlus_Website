@@ -45,7 +45,7 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
   return (
     <div className="backgroundPopUp" onClick={() => setShowCreatePopUp(false)}>
       <div className="containerContentPopUp" onClick={(e) => e.stopPropagation()}>
-        <h2>Créer {table}</h2>
+        <h2>Create {table}</h2>
         
         {filteredColumns.map(col => {
           const value = formData[col];
@@ -75,7 +75,7 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
         {table === "Recipe" && (
           <div className="ingredientsPreview">
             <p className="textReadInstance">
-              Ingrédients : {ingredients.length} sélectionné(s)
+              Selected ingredients : {ingredients.length}
             </p>
             {ingredients.length > 0 && (
               <div className="ingredientsList">
@@ -99,7 +99,7 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
                 className="buttonPopUp buttonIngredients" 
                 onClick={() => setShowIngredientsPopUp(true)}
               >
-                {ingredients.length > 0 ? `Modifier ingrédients (${ingredients.length})` : "Ajouter ingrédients"}
+                {ingredients.length > 0 ? `Modify ingredients (${ingredients.length})` : "Add ingredients"}
               </button>
               <button 
                 className="buttonPopUp buttonCreate" 
