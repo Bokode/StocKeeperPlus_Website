@@ -19,8 +19,12 @@ export async function authFetch(endpoint, option = {}) {
         }
         if (!response.ok) 
         {
-            const errorBody = await response.json().catch(() => ({}));
-            throw new Error(errorBody.message || 'Erreur réseau');
+            const errorBody = await response.json().catch(() => ({ 
+                // Message de secours si le corps n'est pas JSON
+                message: `Erreur réseau ${response.status} sur ${endpoint}` 
+            }));
+
+            throw new Error(JSON.stringify(errorBody));
         }
         return response;
     }
@@ -33,4 +37,20 @@ export async function authFetch(endpoint, option = {}) {
 function handleSessionExpiry()
 {
     window.location.href = `/login?redirect${encodeURIComponent(window.location.pathname)}`;
+}
+
+export function errorMessageHandling(errorObj) {
+    let finalMessage = errorObj.message || "Une erreur est survenue";
+    const details = errorObj.details;
+
+    if (details && Array.isArray(details) && details.length > 0) {
+        
+        finalMessage += "\n\nDétails :\n";
+
+        details.forEach(element => {
+            finalMessage += `- ${element.message}\n`;
+        });
+    }
+
+    return finalMessage;
 }
