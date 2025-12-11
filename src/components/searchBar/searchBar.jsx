@@ -3,13 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
-function SearchBar({ list, index, getInstanceFromDB, getAllInstanceFromDB }) {
+function SearchBar({ list, index, localSearch, getAllInstanceFromDB }) {
   const [searchValue, setSearchValue] = useState("");
   const placeholder = "Search an instance of " + list[index];
 
   function handleSearch() {
     if (searchValue.trim() !== "") {
-      getInstanceFromDB(searchValue);
+      localSearch(searchValue);
     } else {
       getAllInstanceFromDB();
     }

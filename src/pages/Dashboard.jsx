@@ -13,6 +13,7 @@ function Dashboard() {
   const [startItemIndex, setStartItemIndex] = useState(0);
   const [metadata, setMetadata] = useState(null);
   const [data, setData] = useState(null);
+  const [filteredData, setFilteredData] = useState(null);
   const [columns, setColumns] = useState(null);
   const [showCreatePopUp, setShowCreatePopUp] = useState(false);
   const BASE_URL = "http://localhost:3001";
@@ -26,12 +27,11 @@ function Dashboard() {
   const listTable = metadata ? metadata.map(t => t.name) : [];
 
   useEffect(() => {
-  getAllInstanceFromDB();
-  if (metadata) {
-    setColumns(metadata[indexTable].columns.filter(col => col !== "password"));
-  }
-}, [indexTable, metadata]);
-
+    getAllInstanceFromDB();
+    if (metadata) {
+      setColumns(metadata[indexTable].columns.filter(col => col !== "password"));
+    }
+  }, [indexTable, metadata]);
 
   function onPageChange(i) {
     setStartItemIndex((i-1)*listNumber[indexNumber]);
@@ -73,14 +73,27 @@ async function createInstanceFromDB(dataInstance) {
     }
 }
 
+  function localSearch(searchValue) {
+    const allowedColumns = ["label", "mail", "recipe", "food", "user", "store"]
+    if (!data) return;
+    const query = searchValue.toLowerCase();
+    const filtered = data.filter(row =>
+    allowedColumns.some(col =>
+      row[col] !== undefined &&
+      String(row[col]).toLowerCase().includes(query)
+    )
+  );
+    setFilteredData(filtered);
+  }
+
   function getAllInstanceFromDB() {
     authFetch(`${BASE_URL}/${listTable[indexTable]}/all`)
       .then(response => response.json())
-      .then(json => setData(json))
+      .then(json => {setData(json); setFilteredData(null);})
       .catch(error => {setData(null); console.log(error)});
   }
 
-  function getInstanceFromDB(searchQuery) {
+  /*function getInstanceFromDB(searchQuery) {
     const nbPrimaryKeys = metadata[indexTable].primaryKeys.length;
     const parts = searchQuery.split(";").map(p => p.trim());
 
@@ -99,7 +112,7 @@ async function createInstanceFromDB(dataInstance) {
         })
         .catch(error => { setData(null); console.log(error) });
     }
-  }
+  }*/
 
 async function updateInstanceFromDB(dataInstance) { 
     const tableName = listTable[indexTable];
@@ -163,8 +176,8 @@ async function updateInstanceFromDB(dataInstance) {
 
   return (
     <div className='containerApp'>
-      <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} getInstanceFromDB={getInstanceFromDB} getAllInstanceFromDB={getAllInstanceFromDB} setShowCreatePopUp={setShowCreatePopUp}/>
-      <ContentTable data={data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex} deleteInstanceFromDB={deleteInstanceFromDB} updateInstanceFromDB={updateInstanceFromDB} columns={columns} metadata={metadata} currentTable={listTable[indexTable]}/>
+      <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} localSearch={localSearch} getAllInstanceFromDB={getAllInstanceFromDB} setShowCreatePopUp={setShowCreatePopUp}/>
+      <ContentTable data={filteredData || data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex} deleteInstanceFromDB={deleteInstanceFromDB} updateInstanceFromDB={updateInstanceFromDB} columns={columns} metadata={metadata} currentTable={listTable[indexTable]}/>
       <PageChanger numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0} onPageChange={onPageChange}/>
       {showCreatePopUp && (<CreatePopUp setShowCreatePopUp={setShowCreatePopUp} columns={metadata[indexTable].columns} table={metadata[indexTable].name} createInstanceFromDB={createInstanceFromDB}/>)} 
     </div>

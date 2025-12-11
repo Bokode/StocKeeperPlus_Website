@@ -39,9 +39,6 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
         ingredients: ingredients
       };
     }
-
-    console.log("CREATE IngredientAmount payload:", dataToSend);
-
     
     success = await createInstanceFromDB(dataToSend);
 

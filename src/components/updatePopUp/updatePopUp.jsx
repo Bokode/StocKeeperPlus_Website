@@ -44,7 +44,6 @@ function UpdatePopUp({
     setFormData(prev => ({ ...prev, [key]: value }));
   };
 
-  // Fonction qui construit les listes d'ingrédients à ajouter/modifier/supprimer
   const buildIngredientDiffs = () => {
     const ingredientsToAddOrUpdate = [];
     const ingredientsToRemove = [];
@@ -55,7 +54,6 @@ function UpdatePopUp({
     ingredients.forEach(ing => {
       const initial = initialIngredients.find(i => i.label === ing.label);
       if (!initial || initial.quantity !== ing.quantity) {
-        // on envoie label et quantity ; backend devrait résoudre foodId si besoin
         ingredientsToAddOrUpdate.push({ label: ing.label, quantity: ing.quantity });
       }
     });
@@ -69,7 +67,6 @@ function UpdatePopUp({
     return { ingredientsToAddOrUpdate, ingredientsToRemove };
   };
 
-  // Mise à jour spécifique pour Recipe (async et gestion isLoading)
   const handleUpdateRecipe = async () => {
     setIsLoading(true);
 
@@ -83,12 +80,11 @@ function UpdatePopUp({
         caloricintake: formData.caloricintake ? Number(formData.caloricintake) : null,
         nbeaters: formData.nbeaters ? Number(formData.nbeaters) : null,
         timetomake: formData.timetomake ? Number(formData.timetomake) : null,
-        // n'ajoute les listes que si non vides pour rester propre
+
         ...(ingredientsToAddOrUpdate.length > 0 && { ingredientsToAddOrUpdate }),
         ...(ingredientsToRemove.length > 0 && { ingredientsToRemove })
       };
 
-      // updateInstanceFromDB doit retourner une promesse résolue par true/false ou un équivalent
       const success = await updateInstanceFromDB(recipeData);
 
       setIsLoading(false);
@@ -96,21 +92,18 @@ function UpdatePopUp({
       if (success) {
         setShowUpdatePopUp(false);
       }
-      // sinon on laisse la popup ouverte pour afficher erreurs ailleurs
     } catch (err) {
       console.error('Update recipe failed', err);
       setIsLoading(false);
-      // on peut éventuellement afficher une erreur via state dédié si besoin
     }
   };
 
-  // handleUpdate général pour tous les tables
   const handleUpdate = async () => {
     setIsLoading(true);
 
     try {
       if (table === 'Recipe') {
-        // handleUpdateRecipe gère isLoading et la fermeture
+        
         await handleUpdateRecipe();
         return;
       }
