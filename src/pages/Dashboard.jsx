@@ -1,11 +1,12 @@
 import './App.css'
-import ContentTable from './components/contentTable/contentTable';
-import PageChanger from './components/pageChanger/pageChanger';
-import Topbar from './components/topBar/topBar';
-import CreatePopUp from './components/createPopUp/createPopUp';
+import ContentTable from '../components/contentTable/contentTable';
+import PageChanger from '../components/pageChanger/pageChanger';
+import Topbar from '../components/topBar/topBar';
+import CreatePopUp from '../components/createPopUp/createPopUp';
 import { useState, useEffect } from 'react';
+import { authFetch } from '../utils/request';
 
-function App() {
+function Dashboard() {
   const listNumber = [5, 10, 20, 50];
   const [indexTable, setIndexTable] = useState(0);
   const [indexNumber, setIndexNumber] = useState(0);
@@ -14,9 +15,10 @@ function App() {
   const [data, setData] = useState(null);
   const [columns, setColumns] = useState(null);
   const [showCreatePopUp, setShowCreatePopUp] = useState(false);
+  const BASE_URL = "http://localhost:3001";
 
   useEffect(() => {
-    fetch("http://localhost:3001/metadata")
+    fetch(`${BASE_URL}/metadata`)
       .then(res => res.json())
       .then(json => setMetadata(json));
   }, []);
@@ -36,7 +38,7 @@ function App() {
   }
 
   function createInstanceFromDB(dataInstance) {
-    fetch('http://localhost:3001/' + listTable[indexTable], {
+    authFetch(`${BASE_URL}/${listTable[indexTable]}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -55,7 +57,7 @@ function App() {
   }
 
   function getAllInstanceFromDB() {
-    fetch('http://localhost:3001/' + listTable[indexTable] + '/all')
+    authFetch(`${BASE_URL}/${listTable[indexTable]}/all`)
       .then(response => response.json())
       .then(json => setData(json))
       .catch(error => {setData(null); console.log(error)});
@@ -68,7 +70,7 @@ function App() {
     if (parts.length !== nbPrimaryKeys) {
       return alert(`Cette table nécessite ${nbPrimaryKeys} ID\nSi plusieurs ID, ils doivent être séparés par un point-virgule`);
     } else {
-      fetch('http://localhost:3001/' + listTable[indexTable] + '/get/' + (nbPrimaryKeys === 1 ? parts[0] : parts[0] + "/" + parts[1]))
+      authFetch(`${BASE_URL}/${listTable[indexTable]}/get/${(nbPrimaryKeys === 1 ? parts[0] : parts[0] + "/" + parts[1])}`)
         .then(response => response.json())
         .then(json => {
           if (json && (json?.message || json[0]?.message)) {
@@ -83,7 +85,7 @@ function App() {
   }
 
   function updateInstanceFromDB(dataInstance) {
-    fetch('http://localhost:3001/' + listTable[indexTable], {
+    authFetch(`${BASE_URL}/${listTable[indexTable]}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
@@ -102,7 +104,7 @@ function App() {
 
 
   function deleteInstanceFromDB(idObj) {
-    fetch('http://localhost:3001/' + listTable[indexTable], {
+    authFetch(`${BASE_URL}/${listTable[indexTable]}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -128,4 +130,4 @@ function App() {
   )
 }
 
-export default App;
+export default Dashboard;
