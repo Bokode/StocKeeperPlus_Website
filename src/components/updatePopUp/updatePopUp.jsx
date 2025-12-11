@@ -105,6 +105,19 @@ function UpdatePopUp({ setShowUpdatePopUp, instanceAction, dataLabel, updateInst
                   disabled={isLocked} 
                   onChange={(e) => handleChange(key, e.target.checked)}
                 />
+              ) : key === "measuringunit" ? (
+                <select
+                  className={`inputReadInstance ${isLocked ? "inputDisabled" : ""}`}
+                  value={value || ""}
+                  disabled={isLocked}
+                  onChange={(e) => handleChange(key, e.target.value)}
+                  style={{ width: "200px" }}
+                >
+                  <option value="">Select unit</option>
+                  <option value="gram">gram</option>
+                  <option value="liter">liter</option>
+                  <option value="unit">unit</option>
+                </select>
               ) : (
                 <input 
                   className={`inputReadInstance ${isLocked ? "inputDisabled" : ""}`} 

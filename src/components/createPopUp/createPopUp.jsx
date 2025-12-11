@@ -51,6 +51,7 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
         {filteredColumns.map(col => {
           const value = formData[col];
           const isBoolean = col === "isadmin";
+          const isComboBox = col === "measuringunit";
           return (
             <div key={col} className="containerReadInstance">
               <p className="textReadInstance">{col} :</p>
@@ -60,6 +61,18 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
                   checked={value} 
                   onChange={(e) => handleChange(col, e.target.checked)}
                 />
+              ) : isComboBox ? (
+                <select
+                  className="inputReadInstance"
+                  value={value}
+                  onChange={(e) => handleChange(col, e.target.value)}
+                  style={{ width: "180px" }}
+                >
+                  <option value="">Select unit</option>
+                  <option value="gram">gram</option>
+                  <option value="liter">liter</option>
+                  <option value="unit">unit</option>
+                </select>
               ) : (
                 <input 
                   className="inputReadInstance" 
