@@ -18,6 +18,7 @@ import { CircularProgress } from '@mui/material';
 
 import ProductList from './productList';
 import customDay from './customDay';
+import { authFetch } from '../../utils/request';
 
 export default function ExpiryCalendar({UserID}) 
 {
@@ -25,16 +26,16 @@ export default function ExpiryCalendar({UserID})
   const [items, setItems] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
+  
 
   React.useEffect(() => 
   {
     async function fetchData() 
     {
       try {
-        console.log(UserID);
         const encoded = encodeURIComponent(UserID);
-
-        const res = await fetch(
+        
+        const res = await authFetch(
           `http://localhost:3001/foodUser/calendar/${encoded}/foods`
         );
         if (!res.ok) 
