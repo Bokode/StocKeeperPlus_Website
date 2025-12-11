@@ -26,6 +26,12 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
     setIsLoading(true); 
     let success = false;
 
+    if (formData.measuringunit === "") {
+      alert("Please select a measuring unit.");
+      setIsLoading(false);
+      return;
+    }
+
     // Préparation des données
     let dataToSend = formData;
     

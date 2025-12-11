@@ -101,6 +101,12 @@ function UpdatePopUp({
   const handleUpdate = async () => {
     setIsLoading(true);
 
+     if (formData.measuringunit === "") {
+      alert("Please select a measuring unit.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       if (table === 'Recipe') {
         
