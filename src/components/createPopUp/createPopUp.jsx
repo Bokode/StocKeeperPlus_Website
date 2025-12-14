@@ -1,6 +1,5 @@
 import './createPopUp.css';
 import IngredientsPopUp from "../ingredientsPopUp/ingredientsPopUp";
-import ReadIngredientsPopUp from '../readPopUp/readIngredientsIntegration';
 import { useState } from "react";
 
 function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB }) {
@@ -8,7 +7,7 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
 
   const initialForm = {};
   filteredColumns.forEach(c => {
-    initialForm[c] = (c === "isadmin") ? false : "";
+    initialForm[c] = (c === "isadmin") ? false : null;
   });
 
   const [formData, setFormData] = useState(initialForm);

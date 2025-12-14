@@ -123,7 +123,6 @@ function IngredientsPopUp({ setShowIngredientsPopUp, ingredients, setIngredients
           </div>
         </div>
 
-        {/* Boutons d'action */}
         <div className="containerButtonPopUp">
           <button className="buttonPopUp" onClick={() => setShowIngredientsPopUp(false)}>
             Cancel
