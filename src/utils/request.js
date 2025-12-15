@@ -21,7 +21,7 @@ export async function authFetch(endpoint, option = {}) {
         {
             const errorBody = await response.json().catch(() => ({ 
                 // Message de secours si le corps n'est pas JSON
-                message: `Erreur réseau ${response.status} sur ${endpoint}` 
+                message: `Erreur réseau ${response.status}` 
             }));
 
             throw new Error(JSON.stringify(errorBody));
@@ -39,18 +39,36 @@ function handleSessionExpiry()
     window.location.href = `/login?redirect${encodeURIComponent(window.location.pathname)}`;
 }
 
-export function errorMessageHandling(errorObj) {
-    let finalMessage = errorObj.message || "Une erreur est survenue";
-    const details = errorObj.details;
+export function errorMessageHandling(error) {
+  
+  if (typeof error === "string") {
+    return {
+      message: error,
+      details: []
+    };
+  }
 
-    if (details && Array.isArray(details) && details.length > 0) {
-        
-        finalMessage += "\n\nDétails :\n";
-
-        details.forEach(element => {
-            finalMessage += `- ${element.message}\n`;
-        });
+  if (error instanceof Error) {
+    try {
+      const parsed = JSON.parse(error.message);
+      return errorMessageHandling(parsed);
+    } catch {
+      return {
+        message: error.message || "Une erreur est survenue",
+        details: []
+      };
     }
+  }
 
-    return finalMessage;
+  if (error && typeof error === "object") {
+    return {
+      message: error.message || "Une erreur est survenue",
+      details: Array.isArray(error.details) ? error.details : []
+    };
+  }
+  return {
+    message: "Une erreur est survenue",
+    details: []
+  };
 }
+

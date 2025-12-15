@@ -2,7 +2,7 @@ import './createPopUp.css';
 import IngredientsPopUp from "../ingredientsPopUp/ingredientsPopUp";
 import { useState } from "react";
 
-function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB }) {
+function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB, setErrorMessage, setShowErrorPopUp }) {
   const filteredColumns = columns.filter(c => c !== "id");
 
   const initialForm = {};
@@ -27,7 +27,11 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
     let success = false;
 
     if (formData.measuringunit === "") {
-      alert("Please select a measuring unit.");
+      setErrorMessage({
+        message: "Please select a measuring unit.",
+        details: []
+      });
+      setShowErrorPopUp(true);
       setIsLoading(false);
       return;
     }
@@ -131,7 +135,6 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
               <button 
                 className="buttonPopUp buttonCreate" 
                 onClick={handleCreate}
-                // 💡 Feedback visuel : on change le texte et on désactive
                 disabled={ingredients.length === 0 || isLoading}
                 style={{ opacity: isLoading ? 0.7 : 1, cursor: isLoading ? 'wait' : 'pointer' }}
               >
