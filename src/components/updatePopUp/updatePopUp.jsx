@@ -158,7 +158,7 @@ function UpdatePopUp({
                 >
                   <option value="">Select unit</option>
                   <option value="gram">gram</option>
-                  <option value="liter">liter</option>
+                  <option value="centiliter">centiliter</option>
                   <option value="unit">unit</option>
                 </select>
               ) : (
