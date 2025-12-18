@@ -1,3 +1,4 @@
+import { authFetch } from '../../utils/request';
 import './ingredientsPopUp.css';
 import { useState, useEffect } from 'react';
 
@@ -7,7 +8,7 @@ function IngredientsPopUp({ setShowIngredientsPopUp, ingredients, setIngredients
   const [selectedIngredients, setSelectedIngredients] = useState(ingredients);
 
   useEffect(() => {
-    fetch('http://localhost:3001/Food/all')
+    authFetch('http://localhost:3001/Food/all')
       .then(res => res.json())
       .then(json => setAllFoods(json))
       .catch(error => console.error('Error loading foods:', error));
