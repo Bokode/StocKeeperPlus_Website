@@ -52,3 +52,80 @@
     border: none;
     background-color: grey;
 }
+/* Ajouter ces styles à votre createPopUp.css ET updatePopUp.css */
+
+.containerContentPopUp h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  text-align: center;
+}
+
+/* Section de prévisualisation des ingrédients */
+.ingredientsPreview {
+  margin: 15px 0;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 2px solid #e9ecef;
+}
+
+.ingredientsPreview .textReadInstance {
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.ingredientsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ingredientBadge {
+  display: inline-block;
+  padding: 5px 12px;
+  background: #007bff;
+  color: white;
+  border-radius: 16px;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+/* Boutons pour recette */
+.buttonIngredients {
+  background: #28a745 ;
+  color: white;
+}
+
+.buttonIngredients:hover {
+  background: #218838 ;
+}
+
+.buttonCreate, .buttonUpdate {
+  background: #007bff ;
+  color: white;
+}
+
+.buttonCreate:hover:not(:disabled), .buttonUpdate:hover {
+  background: #0056b3 ;
+}
+
+/* On cible précisément le bouton dans son conteneur pour être prioritaire */
+.containerButtonPopUp .buttonCreate:disabled {
+    background-color: #6c757d; /* Le fond gris */
+    color: white;              /* Le texte en blanc (plus besoin de ) */
+    opacity: 0.6;              /* Légère transparence */
+    cursor: not-allowed;       /* Curseur "interdit" */
+    border: none;
+}
+
+/* Ajustement des boutons pour 3 boutons */
+.containerButtonPopUp {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.containerButtonPopUp .buttonPopUp {
+  flex: 1;
+}

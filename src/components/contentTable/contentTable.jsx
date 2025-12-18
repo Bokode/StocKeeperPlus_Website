@@ -3,21 +3,44 @@ import ConfirmationDeletePopUp from '../confirmationDeletePopUp/confirmationDele
 import ExpiryCalendar from '../calendar/ExpiryCalendar';
 import ReadPopUp from '../readPopUp/readPopUp';
 import UpdatePopUp from '../updatePopUp/updatePopUp';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPencil, faTrash, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { formatRow } from '../../utils/tableFormatters';
+import { authFetch } from '../../utils/request';
 
-function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, updateInstanceFromDB, columns, metadata }) {
+function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, updateInstanceFromDB, columns, metadata, currentTable }) {
   const lockedFields = [];
   metadata.forEach(table => {lockedFields.push(...table.primaryKeys);});
   const [identifierObject, setIdentifierObject] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
   const [calendarUserID, setCalendarUserID] = useState(null);
+  const [formattedData, setFormattedData] = useState([]);
+  const [originalData, setOriginalData] = useState([]); // Garder les données originales
 
   const [showConfirmationDeletePopUp, setShowConfirmationDeletePopUp] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showReadPopUp, setShowReadPopUp] = useState(false);
   const [showUpdatePopUp, setShowUpdatePopUp] = useState(false);
+
+  // Formater les données à chaque changement
+  useEffect(() => {
+    const formatData = async () => {
+      if (!data || data.length === 0) {
+        setFormattedData([]);
+        setOriginalData([]);
+        return;
+      }
+
+      setOriginalData(data); // Sauvegarder les données originales
+      const formatted = await Promise.all(
+        data.map(row => formatRow(currentTable, row, columns))
+      );
+      setFormattedData(formatted);
+    };
+
+    formatData();
+  }, [data, currentTable, columns]);
 
   if (!data || data.length === 0) {
     return (
@@ -38,6 +61,42 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
     return obj;
   };
 
+  // Fonction pour charger les détails complets d'une recette
+  const handleEditRecipe = async (row) => {
+    if (currentTable === "Recipe") {
+      try {
+        const response = await authFetch(`http://localhost:3001/Recipe/get/${row.id}`);
+        const fullRecipe = await response.json();
+        setSelectedRow(fullRecipe);
+        setShowUpdatePopUp(true);
+      } catch (error) {
+        console.error("Erreur lors du chargement de la recette:", error);
+        alert("Impossible de charger les détails de la recette");
+      }
+    } else {
+      setSelectedRow(row);
+      setShowUpdatePopUp(true);
+    }
+  };
+
+  // Fonction pour voir les détails (avec ingrédients pour les recettes)
+  const handleViewDetails = async (row) => {
+    if (currentTable === "Recipe") {
+      try {
+        const response = await authFetch(`http://localhost:3001/Recipe/get/${row.id}`);
+        const fullRecipe = await response.json();
+        setSelectedRow(fullRecipe);
+        setShowReadPopUp(true);
+      } catch (error) {
+        console.error("Erreur lors du chargement de la recette:", error);
+        alert("Impossible de charger les détails de la recette");
+      }
+    } else {
+      setSelectedRow(row);
+      setShowReadPopUp(true);
+    }
+  };
+
   return (
     <>
       <table className='containerTable'>
@@ -48,60 +107,60 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
             ))}
             <th className='headerColumn actionColumn'>action</th>
           </tr>
-          {data.slice(startItemIndex, startItemIndex + viewNumber).map((row, i) => (
-            <tr key={i} className='columnTable'>
-              {columns.map(col => {
-                let value = row[col];
-                if (typeof value === "boolean") value = value ? "Oui" : "Non";
-                return <td key={col} className='contentColumn'>{value}</td>;
-              })}
+          {formattedData.slice(startItemIndex, startItemIndex + viewNumber).map((row, i) => {
+            // Récupérer la ligne originale par son index (même position)
+            const dataIndex = startItemIndex + i;
+            const originalRow = originalData[dataIndex];
 
-              <td className='contentColumn actionColumn'>
-                <button
-                  className='buttonAction'
-                  onClick={() => {
-                    setSelectedRow(row);
-                    setShowReadPopUp(true);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faEye} />
-                </button>
+            return (
+              <tr key={i} className='columnTable'>
+                {columns.map(col => {
+                  let value = row[col];
+                  if (typeof value === "boolean") value = value ? "Oui" : "Non";
+                  if (col === "imagepath" || "description") value = value ? (value.length > 20 ? value.slice(0, 20) + "..." : value) : "";
+                  return <td key={col} className='contentColumn'>{value}</td>;
+                })}
 
-                <button
-                  className='buttonAction'
-                  onClick={() => {
-                    setSelectedRow(row);
-                    setShowUpdatePopUp(true);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faPencil} />
-                </button>
+                <td className='contentColumn actionColumn'>
+                  <button
+                    className='buttonAction'
+                    onClick={() => handleViewDetails(originalRow)}
+                  >
+                    <FontAwesomeIcon icon={faEye} />
+                  </button>
 
-                <button
-                  className='buttonAction'
-                  onClick={() => {
-                    setIdentifierObject(getIdentifierObject(row));
-                    setShowConfirmationDeletePopUp(true);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
+                  <button
+                    className='buttonAction'
+                    onClick={() => handleEditRecipe(originalRow)}
+                  >
+                    <FontAwesomeIcon icon={faPencil} />
+                  </button>
 
-                {columns.includes("mail") && (
                   <button
                     className='buttonAction'
                     onClick={() => {
-                      setCalendarUserID(row.mail);
-                      setShowCalendar(!showCalendar);
+                      setIdentifierObject(getIdentifierObject(originalRow));
+                      setShowConfirmationDeletePopUp(true);
                     }}
                   >
-                    <FontAwesomeIcon icon={faCalendar} />
+                    <FontAwesomeIcon icon={faTrash} />
                   </button>
-                )}
-              </td>
-            </tr>
-          ))}
 
+                  {columns.includes("mail") && (
+                    <button
+                      className='buttonAction'
+                      onClick={() => {
+                        setCalendarUserID(originalRow.mail);
+                        setShowCalendar(!showCalendar);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faCalendar} />
+                    </button>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
@@ -122,6 +181,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
           setShowReadPopUp={setShowReadPopUp}
           instanceAction={selectedRow}
           dataLabel={columns}
+          table={currentTable}
         />
       )}
 
@@ -132,6 +192,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
           dataLabel={columns}
           updateInstanceFromDB={updateInstanceFromDB}
           lockedFields={lockedFields}
+          table={currentTable}
         />
       )}
     </>

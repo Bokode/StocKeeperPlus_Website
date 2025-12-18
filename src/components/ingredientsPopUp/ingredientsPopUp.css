@@ -1,0 +1,79 @@
+.containerIngredientsPopUp {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.containerIngredientsPopUp h2 { margin: 0 0 20px 0; text-align: center; color: #333; }
+.containerIngredientsPopUp h3 { margin: 0 0 10px 0; color: #555; font-size: 1.1em; }
+
+.selectedIngredientsSection, .foodsSection { margin-bottom: 20px; }
+.foodsSection .foodsList { background: #f8f9fa; padding: 10px; border-radius: 6px; }
+
+.selectedIngredientsList, .foodsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+.selectedIngredientsList { max-height: 200px; }
+.foodsList { max-height: 300px; }
+
+.selectedIngredientItem, .foodItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.foodItem { cursor: pointer; }
+.foodItem:hover:not(.selected) { background: #e9ecef; transform: translateX(2px); }
+.foodItem.selected { background: #d1e7dd; border-color: #a3cfbb; cursor: default; }
+
+.ingredientLabel, .foodLabel { flex: 1; font-weight: 500; color: #333; }
+.unitLabel { color: #6c757d; font-size: 0.9em; min-width: 50px; text-align: left;}
+.quantityInput { width: 70px; padding: 5px; text-align: center; border: 1px solid #ced4da; border-radius: 4px; }
+.searchInput { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ced4da; border-radius: 4px; }
+
+.foodUnit, .foodDiet, .foodNutriscore {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.85em;
+}
+.foodUnit { background: #f8f9fa; border: 1px solid #dee2e6; color: #495057; }
+.foodDiet { background: #e7f3ff; color: #0066cc; }
+
+.foodNutriscore { color: white; font-weight: bold; border-radius: 4px; text-transform: uppercase; }
+.nutriscore-a { background: #038141; }
+.nutriscore-b { background: #85bb2f; }
+.nutriscore-c { background: #fecb02; color: #333; }
+.nutriscore-d { background: #ee8100; }
+.nutriscore-e { background: #e63e11; }
+
+.removeButton {
+  background: #dc3545; color: white; border: none;
+  padding: 5px 10px; border-radius: 4px; cursor: pointer;
+}
+.removeButton:hover { background: #c82333; }
+.checkmark { color: #28a745; font-weight: bold; font-size: 1.2em; }
+.emptyMessage { text-align: center; color: #6c757d; padding: 15px; font-style: italic; }
+
+.containerButtonPopUp { display: flex; gap: 10px; margin-top: 20px; }
+.buttonPopUp {
+  flex: 1; padding: 10px; border: none; border-radius: 4px; 
+  cursor: pointer; font-weight: 500; color: white;
+}
+.buttonPopUp:first-child { background: #6c757d; } /* Back */
+.buttonPopUp:first-child:hover { background: #5a6268; }
+.buttonPopUp:last-child { background: #007bff; } /* Confirm */
+.buttonPopUp:last-child:hover:not(:disabled) { background: #0056b3; }
+.buttonPopUp:disabled { background: #e9ecef; color: #6c757d; cursor: not-allowed; }
