@@ -22,7 +22,7 @@ function Dashboard() {
   const BASE_URL = "http://localhost:3001";
 
   useEffect(() => {
-    fetch(`${BASE_URL}/metadata`)
+    authFetch(`${BASE_URL}/metadata`)
       .then(res => res.json())
       .then(json => setMetadata(json));
   }, []);

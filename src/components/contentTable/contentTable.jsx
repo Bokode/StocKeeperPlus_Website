@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPencil, faTrash, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { formatRow } from '../../utils/tableFormatters';
+import { authFetch } from '../../utils/request';
 
 function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, updateInstanceFromDB, columns, metadata, currentTable }) {
   const lockedFields = [];
@@ -64,7 +65,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
   const handleEditRecipe = async (row) => {
     if (currentTable === "Recipe") {
       try {
-        const response = await fetch(`http://localhost:3001/Recipe/get/${row.id}`);
+        const response = await authFetch(`http://localhost:3001/Recipe/get/${row.id}`);
         const fullRecipe = await response.json();
         setSelectedRow(fullRecipe);
         setShowUpdatePopUp(true);
@@ -82,7 +83,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
   const handleViewDetails = async (row) => {
     if (currentTable === "Recipe") {
       try {
-        const response = await fetch(`http://localhost:3001/Recipe/get/${row.id}`);
+        const response = await authFetch(`http://localhost:3001/Recipe/get/${row.id}`);
         const fullRecipe = await response.json();
         setSelectedRow(fullRecipe);
         setShowReadPopUp(true);
