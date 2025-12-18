@@ -1,3 +1,5 @@
+import { authFetch } from "./request";
+
 const cache = {
   foods: new Map(),
   recipes: new Map(),
@@ -7,7 +9,7 @@ const cache = {
 const loadFood = async (id) => {
   if (cache.foods.has(id)) return cache.foods.get(id);
   try {
-    const res = await fetch(`http://localhost:3001/Food/get/${id}`);
+    const res = await authFetch(`http://localhost:3001/Food/get/${id}`);
     const data = await res.json();
     cache.foods.set(id, data);
     return data;
@@ -20,7 +22,7 @@ const loadFood = async (id) => {
 const loadRecipe = async (id) => {
   if (cache.recipes.has(id)) return cache.recipes.get(id);
   try {
-    const res = await fetch(`http://localhost:3001/Recipe/get/${id}`);
+    const res = await authFetch(`http://localhost:3001/Recipe/get/${id}`);
     const data = await res.json();
     cache.recipes.set(id, data);
     return data;
@@ -33,7 +35,7 @@ const loadRecipe = async (id) => {
 const loadStore = async (id) => {
   if (cache.stores.has(id)) return cache.stores.get(id);
   try {
-    const res = await fetch(`http://localhost:3001/Store/get/${id}`);
+    const res = await authFetch(`http://localhost:3001/Store/get/${id}`);
     const data = await res.json();
     cache.stores.set(id, data);
     return data;

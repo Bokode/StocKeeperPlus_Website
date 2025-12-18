@@ -8,7 +8,9 @@ function ReadIngredientsIntegration({ ingredients }) {
         {ingredients.map((ing, index) => (
           <div key={index} className="ingredientReadItem">
             <span className="ingredientReadLabel">{ing.label}</span>
-            <span className="ingredientReadQuantity">{ing.quantity}</span>
+            <span className="ingredientReadQuantity">
+              {ing.quantity}{ing.measuringunit ? ` ${ing.measuringunit}` : ''}
+            </span>
             {ing.diet && <span className="ingredientReadDiet">{ing.diet}</span>}
             {ing.nutriscore && (
               <span className={`ingredientReadNutriscore nutriscore-${ing.nutriscore.toLowerCase()}`}>

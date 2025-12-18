@@ -93,27 +93,30 @@
 
 /* Boutons pour recette */
 .buttonIngredients {
-  background: #28a745 !important;
+  background: #28a745 ;
   color: white;
 }
 
 .buttonIngredients:hover {
-  background: #218838 !important;
+  background: #218838 ;
 }
 
 .buttonCreate, .buttonUpdate {
-  background: #007bff !important;
+  background: #007bff ;
   color: white;
 }
 
 .buttonCreate:hover:not(:disabled), .buttonUpdate:hover {
-  background: #0056b3 !important;
+  background: #0056b3 ;
 }
 
-.buttonCreate:disabled {
-  background: #6c757d !important;
-  opacity: 0.5;
-  cursor: not-allowed;
+/* On cible précisément le bouton dans son conteneur pour être prioritaire */
+.containerButtonPopUp .buttonCreate:disabled {
+    background-color: #6c757d; /* Le fond gris */
+    color: white;              /* Le texte en blanc (plus besoin de ) */
+    opacity: 0.6;              /* Légère transparence */
+    cursor: not-allowed;       /* Curseur "interdit" */
+    border: none;
 }
 
 /* Ajustement des boutons pour 3 boutons */

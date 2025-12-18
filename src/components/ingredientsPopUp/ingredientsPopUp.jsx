@@ -6,32 +6,29 @@ function IngredientsPopUp({ setShowIngredientsPopUp, ingredients, setIngredients
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedIngredients, setSelectedIngredients] = useState(ingredients);
 
-  // Charger toutes les foods au montage du composant
   useEffect(() => {
     fetch('http://localhost:3001/Food/all')
       .then(res => res.json())
       .then(json => setAllFoods(json))
-      .catch(error => console.error('Error during ingredients loading:', error));
+      .catch(error => console.error('Error loading foods:', error));
   }, []);
 
-  // Filtrer les foods selon la recherche
   const filteredFoods = allFoods.filter(food =>
     food.label.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Ajouter un ingrédient à la liste
   const handleAddIngredient = (food) => {
-    // Vérifier si l'ingrédient n'est pas déjà ajouté
     if (!selectedIngredients.find(ing => ing.label === food.label)) {
       setSelectedIngredients([...selectedIngredients, { 
         label: food.label, 
-        foodId: food.id, // Garder l'ID pour la suppression dans update
-        quantity: 1 
+        foodId: food.id,
+        quantity: 1,
+        // On s'assure de bien stocker l'unité ici lors de l'ajout
+        measuringunit: food.measuringunit 
       }]);
     }
   };
 
-  // Modifier la quantité d'un ingrédient
   const handleQuantityChange = (label, quantity) => {
     setSelectedIngredients(
       selectedIngredients.map(ing =>
@@ -40,12 +37,10 @@ function IngredientsPopUp({ setShowIngredientsPopUp, ingredients, setIngredients
     );
   };
 
-  // Supprimer un ingrédient
   const handleRemoveIngredient = (label) => {
     setSelectedIngredients(selectedIngredients.filter(ing => ing.label !== label));
   };
 
-  // Confirmer et fermer
   const handleConfirm = () => {
     setIngredients(selectedIngredients);
     setShowIngredientsPopUp(false);
@@ -61,7 +56,7 @@ function IngredientsPopUp({ setShowIngredientsPopUp, ingredients, setIngredients
         <div className="selectedIngredientsSection">
           <h3>Selected ingredients ({selectedIngredients.length})</h3>
           {selectedIngredients.length === 0 ? (
-            <p className="emptyMessage">No ingredients found</p>
+            <p className="emptyMessage">No ingredients selected</p>
           ) : (
             <div className="selectedIngredientsList">
               {selectedIngredients.map(ing => (
@@ -74,6 +69,10 @@ function IngredientsPopUp({ setShowIngredientsPopUp, ingredients, setIngredients
                     onChange={(e) => handleQuantityChange(ing.label, e.target.value)}
                     className="quantityInput"
                   />
+                  {/* Modification ici : Affichage dynamique ou fallback "unit" en anglais */}
+                  <span className="unitLabel">
+                    {ing.measuringunit ? ing.measuringunit : 'unit'}
+                  </span>
                   <button
                     onClick={() => handleRemoveIngredient(ing.label)}
                     className="removeButton"
@@ -86,12 +85,12 @@ function IngredientsPopUp({ setShowIngredientsPopUp, ingredients, setIngredients
           )}
         </div>
 
-        {/* Section de recherche et liste des foods */}
+        {/* Section de recherche */}
         <div className="foodsSection">
           <h3>Add ingredients</h3>
           <input
             type="text"
-            placeholder="Search a food..."
+            placeholder="Search for a food..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="searchInput"
@@ -109,6 +108,9 @@ function IngredientsPopUp({ setShowIngredientsPopUp, ingredients, setIngredients
                     onClick={() => !isSelected && handleAddIngredient(food)}
                   >
                     <span className="foodLabel">{food.label}</span>
+                    {food.measuringunit && (
+                      <span className="foodUnit">{food.measuringunit}</span>
+                    )}
                     {food.diet && <span className="foodDiet">{food.diet}</span>}
                     {food.nutriscore && (
                       <span className={`foodNutriscore nutriscore-${food.nutriscore.toLowerCase()}`}>
@@ -125,7 +127,7 @@ function IngredientsPopUp({ setShowIngredientsPopUp, ingredients, setIngredients
 
         <div className="containerButtonPopUp">
           <button className="buttonPopUp" onClick={() => setShowIngredientsPopUp(false)}>
-            Cancel
+            Back
           </button>
           <button
             className="buttonPopUp"
