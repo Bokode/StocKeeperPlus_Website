@@ -46,6 +46,20 @@ const FormField = ({ name, value, isLoading, onChange }) => {
           <option value="centiliter">centiliter</option>
           <option value="unit">unit</option>
         </select>
+      ) : name === 'description' ? (  
+        /* --- NOUVEAU BLOC POUR TEXTAREA --- */
+        <textarea
+          className="inputReadInstance"
+          value={value}
+          disabled={isLoading}
+          onChange={(e) => onChange(name, e.target.value)}
+          style={{ 
+            height: '100px', 
+            minWidth: '250px', 
+            resize: 'vertical',
+            fontFamily: 'inherit' // Pour garder la même police que les inputs
+          }}
+        />
       ) : (
         <input
           className="inputReadInstance"

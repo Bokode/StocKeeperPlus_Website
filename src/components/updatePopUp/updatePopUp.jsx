@@ -67,6 +67,19 @@ const FormField = ({ name, value, isLocked, isLoading, onChange }) => {
           <option value="centiliter">centiliter</option>
           <option value="unit">unit</option>
         </select>
+      ) : name === 'description' ? (  
+        <textarea
+          className="inputReadInstance"
+          value={value}
+          disabled={isLoading}
+          onChange={(e) => onChange(name, e.target.value)}
+          style={{ 
+            height: '100px', 
+            minWidth: '250px', 
+            resize: 'vertical',
+            fontFamily: 'inherit'
+          }}
+        />
       ) : (
         <input
           className={`inputReadInstance ${isLocked ? 'inputDisabled' : ''}`}
