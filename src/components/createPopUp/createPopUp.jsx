@@ -60,6 +60,15 @@ const FormField = ({ name, value, isLoading, onChange }) => {
             fontFamily: 'inherit' // Pour garder la même police que les inputs
           }}
         />
+      ) : name === "expirationdate" ? (
+        <input
+          className="inputReadInstance"
+          value={value}
+          disabled={isLoading}
+          placeholder='yyyy-mm-dd'
+          onChange={(e) => onChange(name, e.target.value)}
+          type={isNumberField ? 'number' : 'text'}
+        />
       ) : (
         <input
           className="inputReadInstance"
