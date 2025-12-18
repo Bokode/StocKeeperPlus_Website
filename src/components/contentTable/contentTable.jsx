@@ -16,7 +16,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
   const [selectedRow, setSelectedRow] = useState(null);
   const [calendarUserID, setCalendarUserID] = useState(null);
   const [formattedData, setFormattedData] = useState([]);
-  const [originalData, setOriginalData] = useState([]); // Garder les données originales
+  const [originalData, setOriginalData] = useState([]);
 
   const [showConfirmationDeletePopUp, setShowConfirmationDeletePopUp] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -65,7 +65,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
   const handleEditRecipe = async (row) => {
     if (currentTable === "Recipe") {
       try {
-        const response = await authFetch(`http://localhost:3001/Recipe/get/${row.id}`);
+        const response = await authFetch(`http://localhost:3001/v1/Recipe/get/${row.id}`);
         const fullRecipe = await response.json();
         setSelectedRow(fullRecipe);
         setShowUpdatePopUp(true);
@@ -83,7 +83,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
   const handleViewDetails = async (row) => {
     if (currentTable === "Recipe") {
       try {
-        const response = await authFetch(`http://localhost:3001/Recipe/get/${row.id}`);
+        const response = await authFetch(`http://localhost:3001/v1/Recipe/get/${row.id}`);
         const fullRecipe = await response.json();
         setSelectedRow(fullRecipe);
         setShowReadPopUp(true);

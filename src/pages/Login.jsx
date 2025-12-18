@@ -4,7 +4,7 @@ import FieldLog from '../components/loginPage/FieldLog';
 import "../components/loginPage/loginPage.css";
 import { authFetch } from '../utils/request';
 
-const LOGIN_API_URL = 'http://localhost:3001/auth/login'; 
+const LOGIN_API_URL = 'http://localhost:3001/v1/auth/login'; 
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
