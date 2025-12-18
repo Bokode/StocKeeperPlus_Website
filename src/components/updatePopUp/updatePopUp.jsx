@@ -80,6 +80,15 @@ const FormField = ({ name, value, isLocked, isLoading, onChange }) => {
             fontFamily: 'inherit'
           }}
         />
+      ) : name === "expirationdate" ? (
+        <input
+          className="inputReadInstance"
+          value={value}
+          disabled={isLoading}
+          placeholder='yyyy-mm-dd'
+          onChange={(e) => onChange(name, e.target.value)}
+          type={isNumberField ? 'number' : 'text'}
+        />
       ) : (
         <input
           className={`inputReadInstance ${isLocked ? 'inputDisabled' : ''}`}
