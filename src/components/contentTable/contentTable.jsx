@@ -93,6 +93,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
               {columns.map(col => {
                 let value = row[col];
                 if (typeof value === "boolean") value = value ? "Oui" : "Non";
+                if (col === "imagepath") value = value.length > 20 ? value.slice(0, 20) + "..." : value;
                 return <td key={col} className='contentColumn'>{value}</td>;
               })}
 

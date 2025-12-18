@@ -3,7 +3,7 @@ import IngredientsPopUp from "../ingredientsPopUp/ingredientsPopUp";
 import { useState } from "react";
 
 function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB, setErrorMessage, setShowErrorPopUp }) {
-  const filteredColumns = columns.filter(c => c !== "id");
+  const filteredColumns = columns.filter(c => c !== "id" && c !== "imagepath");
 
   const initialForm = {};
   filteredColumns.forEach(c => {
@@ -88,7 +88,7 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB,
                 >
                   <option value="">Select unit</option>
                   <option value="gram">gram</option>
-                  <option value="liter">liter</option>
+                  <option value="centiliter">centiliter</option>
                   <option value="unit">unit</option>
                 </select>
               ) : (
