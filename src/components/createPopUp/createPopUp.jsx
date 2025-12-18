@@ -43,7 +43,7 @@ const FormField = ({ name, value, isLoading, onChange }) => {
         >
           <option value="">Select unit</option>
           <option value="gram">gram</option>
-          <option value="liter">centiliter</option>
+          <option value="centiliter">centiliter</option>
           <option value="unit">unit</option>
         </select>
       ) : (
@@ -59,8 +59,8 @@ const FormField = ({ name, value, isLoading, onChange }) => {
   );
 };
 
-function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB }) {
-  const filteredColumns = columns.filter(c => c !== "id");
+function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB, setErrorMessage, setShowErrorPopUp }) {
+  const filteredColumns = columns.filter(c => c !== "id" && c !== "imagepath");
 
   // Initialisation propre (String vide "" pour le texte, false pour checkbox)
   const [formData, setFormData] = useState(() => {
@@ -80,7 +80,8 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
   };
   
   const handleCreate = async () => {
-    setIsLoading(true); 
+    setIsLoading(true);
+    let success = false;
 
     if (formData.measuringunit === "") {
       setErrorMessage({
@@ -107,7 +108,7 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
       };
     }
     
-    const success = await createInstanceFromDB(dataToSend);
+    success = await createInstanceFromDB(dataToSend);
     setIsLoading(false); 
 
     if (success) {

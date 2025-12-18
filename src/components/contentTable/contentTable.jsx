@@ -21,8 +21,6 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
   const [showCalendar, setShowCalendar] = useState(false);
   const [showReadPopUp, setShowReadPopUp] = useState(false);
   const [showUpdatePopUp, setShowUpdatePopUp] = useState(false);
-  
-  const mapper = [{from:"nbeaters", to:"number of eaters"}];
 
   // Formater les données à chaque changement
   useEffect(() => {
@@ -98,56 +96,45 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
     }
   };
 
-  function Translate(key){
-    const tmp = mapper.find(elem => elem.from === key);
-    return tmp?.to ?? key;
-  }
-
   return (
     <>
       <table className='containerTable'>
         <tbody className='bodyTable'>
           <tr className='columnTable'>
             {columns.map(col => (
-              <th key={col} className='headerColumn'>{Translate(col)}</th>
+              <th key={col} className='headerColumn'>{col}</th>
             ))}
             <th className='headerColumn actionColumn'>action</th>
           </tr>
-          {data.slice(startItemIndex, startItemIndex + viewNumber).map((row, i) => (
-            <tr key={i} className='columnTable'>
-              {columns.map(col => {
-                let value = row[col];
-                if (typeof value === "boolean") value = value ? "Oui" : "Non";
-                if (col === "imagepath") value = value.length > 20 ? value.slice(0, 20) + "..." : value;
-                return <td key={col} className='contentColumn'>{value}</td>;
-              })}
+          {formattedData.slice(startItemIndex, startItemIndex + viewNumber).map((row, i) => {
+            // Récupérer la ligne originale par son index (même position)
+            const dataIndex = startItemIndex + i;
+            const originalRow = originalData[dataIndex];
 
-              <td className='contentColumn actionColumn'>
-                <button
-                  className='buttonAction'
-                  onClick={() => handleViewDetails(row)}
-                >
-                  <FontAwesomeIcon icon={faEye} />
-                </button>
+            return (
+              <tr key={i} className='columnTable'>
+                {columns.map(col => {
+                  let value = row[col];
+                  if (typeof value === "boolean") value = value ? "Oui" : "Non";
+                  if (col === "imagepath") value = value.length > 20 ? value.slice(0, 20) + "..." : value;
+                  return <td key={col} className='contentColumn'>{value}</td>;
+                })}
 
-                <button
-                  className='buttonAction'
-                  onClick={() => handleEditRecipe(row)}
-                >
-                  <FontAwesomeIcon icon={faPencil} />
-                </button>
+                <td className='contentColumn actionColumn'>
+                  <button
+                    className='buttonAction'
+                    onClick={() => handleViewDetails(originalRow)}
+                  >
+                    <FontAwesomeIcon icon={faEye} />
+                  </button>
 
-                <button
-                  className='buttonAction'
-                  onClick={() => {
-                    setIdentifierObject(getIdentifierObject(row));
-                    setShowConfirmationDeletePopUp(true);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
+                  <button
+                    className='buttonAction'
+                    onClick={() => handleEditRecipe(originalRow)}
+                  >
+                    <FontAwesomeIcon icon={faPencil} />
+                  </button>
 
-                {columns.includes("mail") && (
                   <button
                     className='buttonAction'
                     onClick={() => {
