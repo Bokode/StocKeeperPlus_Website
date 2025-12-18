@@ -23,7 +23,7 @@ function Maps() {
   useEffect(() => {
     async function fetchStores() {
       try {
-        const res = await fetch("http://localhost:3001/store/all");
+        const res = await fetch("http://localhost:3001/v1/store/all");
         if (!res.ok) {
           console.error("Erreur API :", res.status);
           return;

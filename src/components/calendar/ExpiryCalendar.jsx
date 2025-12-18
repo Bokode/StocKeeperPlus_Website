@@ -36,7 +36,7 @@ export default function ExpiryCalendar({UserID})
         const encoded = encodeURIComponent(UserID);
         
         const res = await authFetch(
-          `http://localhost:3001/foodUser/calendar/${encoded}/foods`
+          `http://localhost:3001/v1/foodUser/calendar/${encoded}/foods`
         );
         if (!res.ok) 
         {

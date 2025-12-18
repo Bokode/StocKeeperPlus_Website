@@ -45,7 +45,7 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
 
         try 
         {
-            const res = await fetch('http://localhost:3001/foodUser/', 
+            const res = await fetch('http://localhost:3001/v1/foodUser/', 
             {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
@@ -71,7 +71,7 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
     setItems(prev => prev.filter(i => i.id !== item.id));
 
     try {
-        const res = await fetch('http://localhost:3001/foodUser/', { 
+        const res = await fetch('http://localhost:3001/v1/foodUser/', { 
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_mail: `${UserID}`, food: item.id }),

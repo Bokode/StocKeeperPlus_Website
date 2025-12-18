@@ -19,7 +19,7 @@ function Dashboard() {
   const [showCreatePopUp, setShowCreatePopUp] = useState(false);
   const [showErrorPopUp, setShowErrorPopUp] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const BASE_URL = "http://localhost:3001";
+  const BASE_URL = "http://localhost:3001/v1";
 
   useEffect(() => {
     authFetch(`${BASE_URL}/metadata`)
