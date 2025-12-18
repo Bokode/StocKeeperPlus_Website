@@ -43,7 +43,7 @@ const FormField = ({ name, value, isLoading, onChange }) => {
         >
           <option value="">Select unit</option>
           <option value="gram">gram</option>
-          <option value="liter">liter</option>
+          <option value="liter">centiliter</option>
           <option value="unit">unit</option>
         </select>
       ) : (
@@ -81,6 +81,16 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB 
   
   const handleCreate = async () => {
     setIsLoading(true); 
+
+    if (formData.measuringunit === "") {
+      setErrorMessage({
+        message: "Please select a measuring unit.",
+        details: []
+      });
+      setShowErrorPopUp(true);
+      setIsLoading(false);
+      return;
+    }
 
     // Préparation des données
     let dataToSend = { ...formData };

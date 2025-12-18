@@ -113,34 +113,41 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
             ))}
             <th className='headerColumn actionColumn'>action</th>
           </tr>
-          {formattedData.slice(startItemIndex, startItemIndex + viewNumber).map((row, i) => {
-            // Récupérer la ligne originale par son index (même position)
-            const dataIndex = startItemIndex + i;
-            const originalRow = originalData[dataIndex];
+          {data.slice(startItemIndex, startItemIndex + viewNumber).map((row, i) => (
+            <tr key={i} className='columnTable'>
+              {columns.map(col => {
+                let value = row[col];
+                if (typeof value === "boolean") value = value ? "Oui" : "Non";
+                if (col === "imagepath") value = value.length > 20 ? value.slice(0, 20) + "..." : value;
+                return <td key={col} className='contentColumn'>{value}</td>;
+              })}
 
-            return (
-              <tr key={i} className='columnTable'>
-                {columns.map(col => {
-                  let value = row[col];
-                  if (typeof value === "boolean") value = value ? "Oui" : "Non";
-                  return <td key={col} className='contentColumn'>{value}</td>;
-                })}
+              <td className='contentColumn actionColumn'>
+                <button
+                  className='buttonAction'
+                  onClick={() => handleViewDetails(row)}
+                >
+                  <FontAwesomeIcon icon={faEye} />
+                </button>
 
-                <td className='contentColumn actionColumn'>
-                  <button
-                    className='buttonAction'
-                    onClick={() => handleViewDetails(originalRow)}
-                  >
-                    <FontAwesomeIcon icon={faEye} />
-                  </button>
+                <button
+                  className='buttonAction'
+                  onClick={() => handleEditRecipe(row)}
+                >
+                  <FontAwesomeIcon icon={faPencil} />
+                </button>
 
-                  <button
-                    className='buttonAction'
-                    onClick={() => handleEditRecipe(originalRow)}
-                  >
-                    <FontAwesomeIcon icon={faPencil} />
-                  </button>
+                <button
+                  className='buttonAction'
+                  onClick={() => {
+                    setIdentifierObject(getIdentifierObject(row));
+                    setShowConfirmationDeletePopUp(true);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
 
+                {columns.includes("mail") && (
                   <button
                     className='buttonAction'
                     onClick={() => {

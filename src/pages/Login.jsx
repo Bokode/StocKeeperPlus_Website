@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import FieldLog from '../components/loginPage/fieldLog';
+import FieldLog from '../components/loginPage/FieldLog';
 import "../components/loginPage/loginPage.css";
 import { authFetch } from '../utils/request';
 

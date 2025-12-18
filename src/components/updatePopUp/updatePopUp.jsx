@@ -64,7 +64,7 @@ const FormField = ({ name, value, isLocked, isLoading, onChange }) => {
         >
           <option value="">Select unit</option>
           <option value="gram">gram</option>
-          <option value="liter">liter</option>
+          <option value="centiliter">centiliter</option>
           <option value="unit">unit</option>
         </select>
       ) : (
@@ -115,6 +115,13 @@ function UpdatePopUp({setShowUpdatePopUp, instanceAction = {}, dataLabel = [], u
 
   const handleUpdate = async () => {
     setIsLoading(true);
+
+     if (formData.measuringunit === "") {
+      alert("Please select a measuring unit.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       let dataToSend = { ...formData };
 

@@ -3,6 +3,7 @@ import ContentTable from '../components/contentTable/contentTable';
 import PageChanger from '../components/pageChanger/pageChanger';
 import Topbar from '../components/topBar/topBar';
 import CreatePopUp from '../components/createPopUp/createPopUp';
+import ErrorPopUp from '../components/errorPopUp/ErrorPopUp';
 import { useState, useEffect } from 'react';
 import { authFetch, errorMessageHandling } from '../utils/request';
 
@@ -16,6 +17,8 @@ function Dashboard() {
   const [filteredData, setFilteredData] = useState(null);
   const [columns, setColumns] = useState(null);
   const [showCreatePopUp, setShowCreatePopUp] = useState(false);
+  const [showErrorPopUp, setShowErrorPopUp] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const BASE_URL = "http://localhost:3001";
 
   useEffect(() => {
@@ -41,8 +44,9 @@ async function createInstanceFromDB(dataInstance) {
 
     const tableName = listTable[indexTable];
     if (!tableName) {
-        console.error("Erreur: Le nom de la table n'est pas défini. Vérifiez l'état 'metadata'.");
-        alert("Erreur interne: Veuillez recharger la page.");
+        
+        setErrorMessage(errorMessageHandling("Erreur interne: Veuillez recharger la page."));
+        setShowErrorPopUp(true);
         return;
     }
 
@@ -58,7 +62,9 @@ async function createInstanceFromDB(dataInstance) {
 
         
         if (json && (json.message || json[0]?.message)) {
-            alert(json.message || json[0]?.message);
+            
+            setErrorMessage(errorMessageHandling((json.message || json[0]?.message)));
+            setShowErrorPopUp(true);
         } else {
             getAllInstanceFromDB();
             return true;
@@ -66,10 +72,9 @@ async function createInstanceFromDB(dataInstance) {
         
     } catch (error) {
         
-        let messagePourPopup = "Erreur inconnue";
         const errorObj = JSON.parse(error.message);
-        messagePourPopup = errorMessageHandling(errorObj);
-        alert(messagePourPopup);
+        setErrorMessage(errorMessageHandling(errorObj));
+        setShowErrorPopUp(true);
     }
 }
 
@@ -118,7 +123,8 @@ async function updateInstanceFromDB(dataInstance) {
     const tableName = listTable[indexTable];
     
     if (!tableName) {
-        alert("Erreur: Table non définie.");
+        setErrorMessage(errorMessageHandling("Erreur table non definie"));
+        setShowErrorPopUp(true);
         return;
     }
 
@@ -140,10 +146,7 @@ async function updateInstanceFromDB(dataInstance) {
         try {
             
             const errorObj = JSON.parse(error.message);
-            
-            
-            messagePourPopup = errorMessageHandling(errorObj);
-            
+            messagePourPopup = errorObj;
         } catch (e) {
             
             if (error.message.includes("Session expirée")) {
@@ -152,7 +155,8 @@ async function updateInstanceFromDB(dataInstance) {
             messagePourPopup = error.message;
         }
         
-        alert(messagePourPopup);
+        setErrorMessage(errorMessageHandling(messagePourPopup));
+        setShowErrorPopUp(true);
     }
 }
 
@@ -169,7 +173,7 @@ async function updateInstanceFromDB(dataInstance) {
         if (!response.ok) throw new Error('Delete failed');
       })
       .then(() => getAllInstanceFromDB())
-      .catch(error => { console.log(error); });
+      .catch(error => { setErrorMessage(errorMessageHandling(error)); setShowErrorPopUp(true); });
   }
 
   if (!metadata) return <div>Chargement...</div>;
@@ -179,7 +183,8 @@ async function updateInstanceFromDB(dataInstance) {
       <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} localSearch={localSearch} getAllInstanceFromDB={getAllInstanceFromDB} setShowCreatePopUp={setShowCreatePopUp}/>
       <ContentTable data={filteredData || data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex} deleteInstanceFromDB={deleteInstanceFromDB} updateInstanceFromDB={updateInstanceFromDB} columns={columns} metadata={metadata} currentTable={listTable[indexTable]}/>
       <PageChanger numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0} onPageChange={onPageChange}/>
-      {showCreatePopUp && (<CreatePopUp setShowCreatePopUp={setShowCreatePopUp} columns={metadata[indexTable].columns} table={metadata[indexTable].name} createInstanceFromDB={createInstanceFromDB}/>)} 
+      {showCreatePopUp && (<CreatePopUp setShowCreatePopUp={setShowCreatePopUp} columns={metadata[indexTable].columns} table={metadata[indexTable].name} createInstanceFromDB={createInstanceFromDB} setErrorMessage={setErrorMessage} setShowErrorPopUp={setShowErrorPopUp}/>)} 
+      {showErrorPopUp && (<ErrorPopUp error={errorMessage} setShowCreatePopUp={setShowErrorPopUp} />)}
     </div>
   )
 }
