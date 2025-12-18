@@ -1,16 +1,35 @@
 import './readPopUp.css';
+import ReadIngredientsIntegration from './readIngredientsIntegration';
+import { formatValue } from '../../utils/tableFormatters';
+import { extractIngredients } from '../../utils/ingredientsUtils';
+import { useState, useEffect } from 'react';
 
 function ReadPopUp({ setShowReadPopUp, instanceAction, dataLabel, table }) {
+  const [formattedInstance, setFormattedInstance] = useState(null);
   
-  // Extraire les ingrédients si c'est une recette
-  const ingredients = table === "Recipe" && instanceAction.ingredientamount_ingredientamount_recipeTorecipe
-    ? instanceAction.ingredientamount_ingredientamount_recipeTorecipe.map(ing => ({
-        label: ing.food_ingredientamount_foodTofood.label,
-        quantity: ing.quantity,
-        diet: ing.food_ingredientamount_foodTofood.diet,
-        nutriscore: ing.food_ingredientamount_foodTofood.nutriscore
-      }))
-    : [];
+  // Formater les valeurs au chargement
+  useEffect(() => {
+    const formatData = async () => {
+      if (!instanceAction) return;
+      
+      const formatted = { ...instanceAction };
+      for (const key of dataLabel) {
+        if (instanceAction[key] != null) {
+          formatted[key] = await formatValue(table, key, instanceAction[key]);
+        }
+      }
+      setFormattedInstance(formatted);
+    };
+    
+    formatData();
+  }, [instanceAction, dataLabel, table]);
+  
+  // Utiliser extractIngredients pour récupérer les ingrédients avec l'unité
+  const ingredients = table === "Recipe" ? extractIngredients(instanceAction) : [];
+
+  if (!formattedInstance) {
+    return <div>Chargement...</div>;
+  }
 
   return (
     <div className='backgroundPopUp' onClick={() => setShowReadPopUp(false)}>
@@ -18,7 +37,7 @@ function ReadPopUp({ setShowReadPopUp, instanceAction, dataLabel, table }) {
         <h2>Détails {table}</h2>
         
         {dataLabel.map((key) => {
-          let value = instanceAction[key];
+          let value = formattedInstance[key];
           if (typeof value === "boolean") value = value ? "Oui" : "Non";
 
           return (
@@ -28,25 +47,8 @@ function ReadPopUp({ setShowReadPopUp, instanceAction, dataLabel, table }) {
           );
         })}
 
-        {/* Afficher les ingrédients pour les recettes */}
         {table === "Recipe" && ingredients.length > 0 && (
-          <div className="ingredientsSection">
-            <h3>Ingrédients ({ingredients.length})</h3>
-            <div className="ingredientsReadList">
-              {ingredients.map((ing, index) => (
-                <div key={index} className="ingredientReadItem">
-                  <span className="ingredientReadLabel">{ing.label}</span>
-                  <span className="ingredientReadQuantity">{ing.quantity}</span>
-                  {ing.diet && <span className="ingredientReadDiet">{ing.diet}</span>}
-                  {ing.nutriscore && (
-                    <span className={`ingredientReadNutriscore nutriscore-${ing.nutriscore.toLowerCase()}`}>
-                      {ing.nutriscore}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+          <ReadIngredientsIntegration ingredients={ingredients} />
         )}
 
         <div className='containerReadButtonPopUp'>

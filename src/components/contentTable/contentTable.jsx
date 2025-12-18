@@ -3,9 +3,10 @@ import ConfirmationDeletePopUp from '../confirmationDeletePopUp/confirmationDele
 import ExpiryCalendar from '../calendar/ExpiryCalendar';
 import ReadPopUp from '../readPopUp/readPopUp';
 import UpdatePopUp from '../updatePopUp/updatePopUp';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPencil, faTrash, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { formatRow } from '../../utils/tableFormatters';
 
 function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, updateInstanceFromDB, columns, metadata, currentTable }) {
   const lockedFields = [];
@@ -13,11 +14,34 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
   const [identifierObject, setIdentifierObject] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
   const [calendarUserID, setCalendarUserID] = useState(null);
+  const [formattedData, setFormattedData] = useState([]);
+  const [originalData, setOriginalData] = useState([]); // Garder les données originales
 
   const [showConfirmationDeletePopUp, setShowConfirmationDeletePopUp] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showReadPopUp, setShowReadPopUp] = useState(false);
   const [showUpdatePopUp, setShowUpdatePopUp] = useState(false);
+  
+  const mapper = [{from:"nbeaters", to:"number of eaters"}];
+
+  // Formater les données à chaque changement
+  useEffect(() => {
+    const formatData = async () => {
+      if (!data || data.length === 0) {
+        setFormattedData([]);
+        setOriginalData([]);
+        return;
+      }
+
+      setOriginalData(data); // Sauvegarder les données originales
+      const formatted = await Promise.all(
+        data.map(row => formatRow(currentTable, row, columns))
+      );
+      setFormattedData(formatted);
+    };
+
+    formatData();
+  }, [data, currentTable, columns]);
 
   if (!data || data.length === 0) {
     return (
@@ -42,7 +66,6 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
   const handleEditRecipe = async (row) => {
     if (currentTable === "Recipe") {
       try {
-        // Charger la recette complète avec les ingrédients
         const response = await fetch(`http://localhost:3001/Recipe/get/${row.id}`);
         const fullRecipe = await response.json();
         setSelectedRow(fullRecipe);
@@ -52,7 +75,6 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
         alert("Impossible de charger les détails de la recette");
       }
     } else {
-      // Pour les autres tables, pas besoin de charger plus de données
       setSelectedRow(row);
       setShowUpdatePopUp(true);
     }
@@ -62,7 +84,6 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
   const handleViewDetails = async (row) => {
     if (currentTable === "Recipe") {
       try {
-        // Charger la recette complète avec les ingrédients
         const response = await fetch(`http://localhost:3001/Recipe/get/${row.id}`);
         const fullRecipe = await response.json();
         setSelectedRow(fullRecipe);
@@ -72,11 +93,15 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
         alert("Impossible de charger les détails de la recette");
       }
     } else {
-      // Pour les autres tables, pas besoin de charger plus de données
       setSelectedRow(row);
       setShowReadPopUp(true);
     }
   };
+
+  function Translate(key){
+    const tmp = mapper.find(elem => elem.from === key);
+    return tmp?.to ?? key;
+  }
 
   return (
     <>
@@ -84,7 +109,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
         <tbody className='bodyTable'>
           <tr className='columnTable'>
             {columns.map(col => (
-              <th key={col} className='headerColumn'>{col}</th>
+              <th key={col} className='headerColumn'>{Translate(col)}</th>
             ))}
             <th className='headerColumn actionColumn'>action</th>
           </tr>
@@ -126,17 +151,28 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
                   <button
                     className='buttonAction'
                     onClick={() => {
-                      setCalendarUserID(row.mail);
-                      setShowCalendar(!showCalendar);
+                      setIdentifierObject(getIdentifierObject(originalRow));
+                      setShowConfirmationDeletePopUp(true);
                     }}
                   >
-                    <FontAwesomeIcon icon={faCalendar} />
+                    <FontAwesomeIcon icon={faTrash} />
                   </button>
-                )}
-              </td>
-            </tr>
-          ))}
 
+                  {columns.includes("mail") && (
+                    <button
+                      className='buttonAction'
+                      onClick={() => {
+                        setCalendarUserID(originalRow.mail);
+                        setShowCalendar(!showCalendar);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faCalendar} />
+                    </button>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
