@@ -20,7 +20,6 @@ export async function authFetch(endpoint, option = {}) {
         if (!response.ok) 
         {
             const errorBody = await response.json().catch(() => ({ 
-                
                 message: `Erreur réseau ${response.status}` 
             }));
 

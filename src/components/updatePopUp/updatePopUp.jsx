@@ -103,7 +103,6 @@ const FormField = ({ name, value, isLocked, isLoading, onChange }) => {
 };
 
 function UpdatePopUp({setShowUpdatePopUp, instanceAction = {}, dataLabel = [], updateInstanceFromDB, lockedFields = [], table}) {
-  // State Formulaire
   const [formData, setFormData] = useState(() => {
     const data = {};
     dataLabel.forEach(key => {
@@ -113,7 +112,6 @@ function UpdatePopUp({setShowUpdatePopUp, instanceAction = {}, dataLabel = [], u
     return data;
   });
 
-  // State Ingrédients
   const [initialIngredients] = useState(() => {
     if (table === 'Recipe' && instanceAction?.ingredientamount_ingredientamount_recipeTorecipe) {
       return instanceAction.ingredientamount_ingredientamount_recipeTorecipe.map(ing => ({
@@ -130,7 +128,6 @@ function UpdatePopUp({setShowUpdatePopUp, instanceAction = {}, dataLabel = [], u
   const [showIngredientsPopUp, setShowIngredientsPopUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Gestionnaire de changement générique
   const handleChange = (key, value) => {
     setFormData(prev => ({ ...prev, [key]: value }));
   };

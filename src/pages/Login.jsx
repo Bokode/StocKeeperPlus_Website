@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FieldLog from '../components/loginPage/FieldLog';
 import "../components/loginPage/loginPage.css";
-import { authFetch } from '../utils/request';
+import { errorMessageHandling } from '../utils/request';
 
 const LOGIN_API_URL = 'http://localhost:3001/v1/auth/login'; 
 
@@ -25,43 +25,33 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await authFetch(LOGIN_API_URL, {
+      const response = await fetch(LOGIN_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include', 
         body: JSON.stringify({ email, password }), 
       });
 
-      // 1. Gestion des erreurs HTTP (401, 404, 500...)
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         setError(errorData.message || 'Identifiants invalides ou erreur serveur.');
         return;
       }
 
-      // 2. Si la connexion est OK, on lit les données renvoyées par le backend
       const data = await response.json();
-
-      console.log("Données de connexion reçues :", data);
-      // 3. Vérification du rôle (Adaptez 'isadmin' ou 'role' selon votre backend)
-      // Selon votre CreatePopUp.jsx, le champ semble être "isadmin" ou "role"
-      // Modifiez la condition ci-dessous selon ce que votre API renvoie exactement :
-      if (data.role !== "admin") { 
-          setError("Accès refusé : ce compte n'est pas administrateur.");
-          setIsLoading(false); // Important pour réactiver le bouton
-          return; // ON ARRÊTE TOUT ICI -> Pas de redirection
+      if (data.payload && data.payload.role === 'admin') {
+        localStorage.setItem('isAuthenticated', 'true');
+        navigate(redirectPath, { replace: true });
+      } else {
+        setError("Accès refusé.");
       }
-
-      // 4. Si c'est un admin, on continue
-      localStorage.setItem('isAuthenticated', 'true');
-      navigate(redirectPath, { replace: true }); 
       
     } catch (err) {
       console.error("Erreur durant la connexion:", err);
-      setError('Une erreur réseau est survenue. Veuillez réessayer.');
+      const handledError = errorMessageHandling(err);
+      setError(handledError.message);
     } finally {
-      // Note: Si on a redirigé, le composant sera démonté donc ce finally n'est pas grave
-      // Si on est resté pour afficher l'erreur, ceci réactive le formulaire
+
       setIsLoading(false);
     }
   };

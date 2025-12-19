@@ -32,3 +32,12 @@
     align-content: center;
     margin-right: 5%;
 }
+
+.logout-btn { 
+    margin-left: '10px';
+    cursor: 'pointer';
+    background: #fff;
+    border: 'none';
+    font-size: '1.2rem';
+    color: #333;
+}
