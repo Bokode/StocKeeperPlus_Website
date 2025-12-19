@@ -45,7 +45,7 @@ docker compose up --build
 
 Une fois le démarrage terminé :
 
-* **Frontend (Site Web)** : Accessible à l'adresse [http://localhost:5173](https://www.google.com/search?q=http://localhost:5173)
+* **Frontend (Site Web)** : Accessible à l'adresse [http://localhost:5173]
 
 ## Scripts Disponibles
 
