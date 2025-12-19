@@ -6,6 +6,7 @@ import CreatePopUp from '../components/createPopUp/createPopUp';
 import ErrorPopUp from '../components/errorPopUp/ErrorPopUp';
 import { useState, useEffect } from 'react';
 import { authFetch, errorMessageHandling } from '../utils/request';
+import Maps from '../components/maps/maps.jsx';
 
 function Dashboard() {
   const listNumber = [5, 10, 20, 50];
@@ -180,6 +181,7 @@ async function updateInstanceFromDB(dataInstance) {
         metadata={metadata} 
         currentTable={listTable[indexTable]}
       />
+      {listTable[indexTable] === "Store" && <Maps />}
       <PageChanger 
         numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0} 
         onPageChange={onPageChange}
