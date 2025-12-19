@@ -19,7 +19,6 @@ function Maps() {
   }, []);
 
 
-  // Charger les magasins depuis le backend avec l'api
   useEffect(() => {
     async function fetchStores() {
       try {
@@ -46,7 +45,6 @@ function Maps() {
   }, []);
 
 
-  //Centre la carte sur la position de l'utilisateur quand obtenue
   function SetViewOnUser() {
     const map = useMap();
     useEffect(() => {
@@ -64,21 +62,18 @@ function ResizeMap() {
     const updateMapHeight = () => {
       const mapContainer = map.getContainer();
 
-      // position Y du haut du conteneur par rapport à la fenêtre
       const rect = mapContainer.getBoundingClientRect();
       const topOffset = rect.top;
 
-      const bottomMargin = 20; // marge en bas
+      const bottomMargin = 20;
       const availableHeight = window.innerHeight - topOffset - bottomMargin;
 
       mapContainer.style.height = `${availableHeight}px`;
       map.invalidateSize();
     };
 
-    // appel initial
     updateMapHeight();
 
-    // mise à jour au redimensionnement
     window.addEventListener("resize", updateMapHeight);
     return () => window.removeEventListener("resize", updateMapHeight);
   }, [map]);
@@ -100,26 +95,22 @@ function ResizeMap() {
             width: "100%"
           }
           }>
-        {/* Fond de carte OpenStreetMap */}
+          
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; OpenStreetMap contributors"
         />
 
-        {/* Gestion du redimensionnement de la carte */}
         <ResizeMap />
 
-        {/* Centrage automatique sur l'utilisateur */}
         <SetViewOnUser />
 
-        {/* Marker position utilisateur */}
         {userPos && (
           <CircleMarker center={[userPos.lat, userPos.lng]} radius={8} color="grey" fillColor="blue" fillOpacity={1}>
             <Popup>Vous êtes ici</Popup>
           </CircleMarker>
         )}
 
-        {/* Markers magasins */}
         {stores.map((store) => (
           <Marker key={store.id} position={[store.latitude, store.longitude]}>
             <Popup>

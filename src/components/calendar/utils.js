@@ -12,11 +12,11 @@ export function getUrgencyColor(expirationDate)
     const today = dayjs().startOf('day');
     const daysUntilExpiry = expiry.diff(today, 'day');
   
-    if (daysUntilExpiry < 0) return '#9a2222ff'; // Périmé
-    if (daysUntilExpiry === 0) return '#f44336'; // Aujourd'hui
-    if (daysUntilExpiry <= 3) return '#ff9800'; // 1-3 jours
-    if (daysUntilExpiry <= 7) return '#ffc107'; // 4-7 jours
-    return '#4caf50'; // > 7 jours
+    if (daysUntilExpiry < 0) return '#9a2222ff';
+    if (daysUntilExpiry === 0) return '#f44336';
+    if (daysUntilExpiry <= 3) return '#ff9800';
+    if (daysUntilExpiry <= 7) return '#ffc107';
+    return '#4caf50';
 }
 
 export function getUrgencyLabel(expirationDate) 
