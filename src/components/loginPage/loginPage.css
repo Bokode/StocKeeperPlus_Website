@@ -3,13 +3,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #4f46e5, #3b82f6);
+  background: #4f46e5;
   font-family: Arial, sans-serif;
   border-radius: 24px;
   margin-top: 200px;
 }
-
-
 
 .login-card {
   background: white;
@@ -45,12 +43,6 @@
 
 .login-btn:hover {
   background: #4338ca;
-}
-
-
-.field-log {
-  position: relative;
-  margin-bottom: 1.5rem;
 }
 
 .inputField {
@@ -90,4 +82,32 @@
 
 h1 {
     color: #000;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+.field-log {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px; 
+}
+
+.field-log-input {
+  width: 100%;
+  padding: 10px;
+  padding-right: 40px; 
+  border-radius: 4px;
+  box-sizing: border-box; 
+}
+
+.buttonPW {
+            position: absolute;
+            right: 10px;
+            top: 2px;
+            background-color: #fff;
+            cursor: pointer;
+            color: #555;
 }

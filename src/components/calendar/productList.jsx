@@ -6,6 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { capitalize, getUrgencyColor, getUrgencyLabel } from './utils';
+import { authFetch } from '../../utils/request';
 
 export default function ProductList({ selectedDayItems, setItems, UserID }) 
 {
@@ -45,7 +46,7 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
 
         try 
         {
-            const res = await fetch('http://localhost:3001/v1/foodUser/', 
+            const res = await authFetch('http://localhost:3001/v1/foodUser/', 
             {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
@@ -62,7 +63,6 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
         } catch(err)
         {
             console.error("Erreur lors de la mise à jour de la quantité :", err);
-        
         }
     };
 
@@ -71,7 +71,7 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
     setItems(prev => prev.filter(i => i.id !== item.id));
 
     try {
-        const res = await fetch('http://localhost:3001/v1/foodUser/', { 
+        const res = await authFetch('http://localhost:3001/v1/foodUser/', { 
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_mail: `${UserID}`, food: item.id }),
@@ -108,7 +108,6 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
                             '&:hover': { boxShadow: 2, transform: 'translateY(-2px)' },
                         }}
                     >
-                    {/*petite barre sympa*/}
                     <Box
                         sx={{
                             width: 6,
@@ -158,8 +157,7 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
             })}
         </List>
 
-        {/* Dialog de confirmation*/}
-        <Dialog open={confirmDialog.open} onClose={closeConfirm} disableRestoreFocus> {/*fix un warning*/}
+        <Dialog open={confirmDialog.open} onClose={closeConfirm} disableRestoreFocus>
             <DialogTitle>Supprimer le produit</DialogTitle>
             <DialogContent>
                 <DialogContentText>

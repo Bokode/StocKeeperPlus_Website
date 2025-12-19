@@ -59,14 +59,12 @@ export const formatters = {
   }
 };
 
-// Formate une valeur selon table/colonne
 export const formatValue = async (table, column, value) => {
   return formatters[table]?.[column] 
     ? await formatters[table][column](value) 
     : value;
 };
 
-// Formate toutes les colonnes d'une ligne
 export const formatRow = async (table, row, columns) => {
   const formatted = { ...row };
   for (const col of columns) {
@@ -77,7 +75,6 @@ export const formatRow = async (table, row, columns) => {
   return formatted;
 };
 
-// Efface le cache (après create/update/delete)
 export const clearCache = (type = 'all') => {
   if (type === 'all') {
     Object.values(cache).forEach(map => map.clear());
@@ -86,5 +83,4 @@ export const clearCache = (type = 'all') => {
   }
 };
 
-// Supprime une entrée spécifique du cache
 export const removeCacheEntry = (type, key) => cache[type]?.delete(key);
