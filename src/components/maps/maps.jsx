@@ -1,6 +1,21 @@
 import "./maps.css";
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from "react-leaflet";
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import { authFetch } from "../../utils/request";
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41]
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
 
 function Maps() {
   const [userPos, setUserPos] = useState(null);
@@ -19,24 +34,29 @@ function Maps() {
   }, []);
 
 
-  // Charger les magasins depuis le backend avec l'api
   useEffect(() => {
     async function fetchStores() {
       try {
-        const res = await fetch("http://localhost:3001/store/all");
+        const res = await authFetch("http://localhost:3001/v1/store/all", {
+            credentials: 'include' 
+        });
+
         if (!res.ok) {
           console.error("Erreur API :", res.status);
           return;
         }
         const data = await res.json();
-        setStores(
-          data.map(store => ({
-            ...store,
-            latitude: Number(store.latitude),
-            longitude: Number(store.longitude)
-            })
-          )
-        );
+        
+        const validStores = data
+            .map(store => ({
+                ...store,
+                latitude: Number(store.latitude),
+                longitude: Number(store.longitude)
+            }))
+            .filter(store => !isNaN(store.latitude) && !isNaN(store.longitude));
+
+        setStores(validStores);
+        
       } catch (err) {
         console.error("Erreur fetch :", err);
       }
@@ -46,7 +66,6 @@ function Maps() {
   }, []);
 
 
-  //Centre la carte sur la position de l'utilisateur quand obtenue
   function SetViewOnUser() {
     const map = useMap();
     useEffect(() => {
@@ -57,69 +76,27 @@ function Maps() {
     return null;
   }
 
-function ResizeMap() {
-  const map = useMap();
-
-  useEffect(() => {
-    const updateMapHeight = () => {
-      const mapContainer = map.getContainer();
-
-      // position Y du haut du conteneur par rapport à la fenêtre
-      const rect = mapContainer.getBoundingClientRect();
-      const topOffset = rect.top;
-
-      const bottomMargin = 20; // marge en bas
-      const availableHeight = window.innerHeight - topOffset - bottomMargin;
-
-      mapContainer.style.height = `${availableHeight}px`;
-      map.invalidateSize();
-    };
-
-    // appel initial
-    updateMapHeight();
-
-    // mise à jour au redimensionnement
-    window.addEventListener("resize", updateMapHeight);
-    return () => window.removeEventListener("resize", updateMapHeight);
-  }, [map]);
-
-  return null;
-}
-
-
-
 
   return (
-    <div style={{ height: "100%", width: "100%" }}>
+    <div style={{ width: "100%" }}>
       <MapContainer 
         center={[50.4669, 4.8674]} 
         zoom={14} 
-        style={
-          {
-            height: "100%",
-            width: "100%"
-          }
-          }>
-        {/* Fond de carte OpenStreetMap */}
+        style={{ height: "66vh", width: "100%" }}
+      > 
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; OpenStreetMap contributors"
         />
 
-        {/* Gestion du redimensionnement de la carte */}
-        <ResizeMap />
-
-        {/* Centrage automatique sur l'utilisateur */}
         <SetViewOnUser />
 
-        {/* Marker position utilisateur */}
         {userPos && (
           <CircleMarker center={[userPos.lat, userPos.lng]} radius={8} color="grey" fillColor="blue" fillOpacity={1}>
             <Popup>Vous êtes ici</Popup>
           </CircleMarker>
         )}
 
-        {/* Markers magasins */}
         {stores.map((store) => (
           <Marker key={store.id} position={[store.latitude, store.longitude]}>
             <Popup>

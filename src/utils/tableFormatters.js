@@ -9,7 +9,7 @@ const cache = {
 const loadFood = async (id) => {
   if (cache.foods.has(id)) return cache.foods.get(id);
   try {
-    const res = await authFetch(`http://localhost:3001/Food/get/${id}`);
+    const res = await authFetch(`http://localhost:3001/v1/Food/get/${id}`);
     const data = await res.json();
     cache.foods.set(id, data);
     return data;
@@ -22,7 +22,7 @@ const loadFood = async (id) => {
 const loadRecipe = async (id) => {
   if (cache.recipes.has(id)) return cache.recipes.get(id);
   try {
-    const res = await authFetch(`http://localhost:3001/Recipe/get/${id}`);
+    const res = await authFetch(`http://localhost:3001/v1/Recipe/get/${id}`);
     const data = await res.json();
     cache.recipes.set(id, data);
     return data;
@@ -35,7 +35,7 @@ const loadRecipe = async (id) => {
 const loadStore = async (id) => {
   if (cache.stores.has(id)) return cache.stores.get(id);
   try {
-    const res = await authFetch(`http://localhost:3001/Store/get/${id}`);
+    const res = await authFetch(`http://localhost:3001/v1/Store/get/${id}`);
     const data = await res.json();
     cache.stores.set(id, data);
     return data;
@@ -59,14 +59,12 @@ export const formatters = {
   }
 };
 
-// Formate une valeur selon table/colonne
 export const formatValue = async (table, column, value) => {
   return formatters[table]?.[column] 
     ? await formatters[table][column](value) 
     : value;
 };
 
-// Formate toutes les colonnes d'une ligne
 export const formatRow = async (table, row, columns) => {
   const formatted = { ...row };
   for (const col of columns) {
@@ -77,7 +75,6 @@ export const formatRow = async (table, row, columns) => {
   return formatted;
 };
 
-// Efface le cache (après create/update/delete)
 export const clearCache = (type = 'all') => {
   if (type === 'all') {
     Object.values(cache).forEach(map => map.clear());
@@ -86,5 +83,4 @@ export const clearCache = (type = 'all') => {
   }
 };
 
-// Supprime une entrée spécifique du cache
 export const removeCacheEntry = (type, key) => cache[type]?.delete(key);

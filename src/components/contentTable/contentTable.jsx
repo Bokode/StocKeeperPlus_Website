@@ -16,14 +16,13 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
   const [selectedRow, setSelectedRow] = useState(null);
   const [calendarUserID, setCalendarUserID] = useState(null);
   const [formattedData, setFormattedData] = useState([]);
-  const [originalData, setOriginalData] = useState([]); // Garder les données originales
+  const [originalData, setOriginalData] = useState([]);
 
   const [showConfirmationDeletePopUp, setShowConfirmationDeletePopUp] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showReadPopUp, setShowReadPopUp] = useState(false);
   const [showUpdatePopUp, setShowUpdatePopUp] = useState(false);
 
-  // Formater les données à chaque changement
   useEffect(() => {
     const formatData = async () => {
       if (!data || data.length === 0) {
@@ -32,7 +31,7 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
         return;
       }
 
-      setOriginalData(data); // Sauvegarder les données originales
+      setOriginalData(data);
       const formatted = await Promise.all(
         data.map(row => formatRow(currentTable, row, columns))
       );
@@ -61,11 +60,10 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
     return obj;
   };
 
-  // Fonction pour charger les détails complets d'une recette
   const handleEditRecipe = async (row) => {
     if (currentTable === "Recipe") {
       try {
-        const response = await authFetch(`http://localhost:3001/Recipe/get/${row.id}`);
+        const response = await authFetch(`http://localhost:3001/v1/Recipe/get/${row.id}`);
         const fullRecipe = await response.json();
         setSelectedRow(fullRecipe);
         setShowUpdatePopUp(true);
@@ -79,11 +77,10 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
     }
   };
 
-  // Fonction pour voir les détails (avec ingrédients pour les recettes)
   const handleViewDetails = async (row) => {
     if (currentTable === "Recipe") {
       try {
-        const response = await authFetch(`http://localhost:3001/Recipe/get/${row.id}`);
+        const response = await authFetch(`http://localhost:3001/v1/Recipe/get/${row.id}`);
         const fullRecipe = await response.json();
         setSelectedRow(fullRecipe);
         setShowReadPopUp(true);
@@ -108,7 +105,6 @@ function ContentTable({ data, viewNumber, startItemIndex, deleteInstanceFromDB, 
             <th className='headerColumn actionColumn'>action</th>
           </tr>
           {formattedData.slice(startItemIndex, startItemIndex + viewNumber).map((row, i) => {
-            // Récupérer la ligne originale par son index (même position)
             const dataIndex = startItemIndex + i;
             const originalRow = originalData[dataIndex];
 

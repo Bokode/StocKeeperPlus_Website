@@ -52,7 +52,6 @@
     border: none;
     background-color: grey;
 }
-/* Ajouter ces styles à votre createPopUp.css ET updatePopUp.css */
 
 .containerContentPopUp h2 {
   margin: 0 0 20px 0;
@@ -60,7 +59,6 @@
   text-align: center;
 }
 
-/* Section de prévisualisation des ingrédients */
 .ingredientsPreview {
   margin: 15px 0;
   padding: 15px;
@@ -91,7 +89,6 @@
   font-weight: 500;
 }
 
-/* Boutons pour recette */
 .buttonIngredients {
   background: #28a745 ;
   color: white;
@@ -110,16 +107,14 @@
   background: #0056b3 ;
 }
 
-/* On cible précisément le bouton dans son conteneur pour être prioritaire */
 .containerButtonPopUp .buttonCreate:disabled {
-    background-color: #6c757d; /* Le fond gris */
-    color: white;              /* Le texte en blanc (plus besoin de ) */
-    opacity: 0.6;              /* Légère transparence */
-    cursor: not-allowed;       /* Curseur "interdit" */
+    background-color: #6c757d;
+    color: white;
+    opacity: 0.6;
+    cursor: not-allowed;
     border: none;
 }
 
-/* Ajustement des boutons pour 3 boutons */
 .containerButtonPopUp {
   display: flex;
   gap: 10px;

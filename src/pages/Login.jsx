@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FieldLog from '../components/loginPage/FieldLog';
 import "../components/loginPage/loginPage.css";
-import { authFetch } from '../utils/request';
+import { errorMessageHandling } from '../utils/request';
 
-const LOGIN_API_URL = 'http://localhost:3001/auth/login'; 
+const LOGIN_API_URL = 'http://localhost:3001/v1/auth/login'; 
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -25,7 +25,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await authFetch(LOGIN_API_URL, {
+      const response = await fetch(LOGIN_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include', 
@@ -33,19 +33,25 @@ export default function LoginPage() {
       });
 
       if (!response.ok) {
-        
         const errorData = await response.json().catch(() => ({}));
         setError(errorData.message || 'Identifiants invalides ou erreur serveur.');
         return;
       }
 
-      
-      navigate(redirectPath, { replace: true }); 
+      const data = await response.json();
+      if (data.payload && data.payload.role === 'admin') {
+        localStorage.setItem('isAuthenticated', 'true');
+        navigate(redirectPath, { replace: true });
+      } else {
+        setError("Accès refusé.");
+      }
       
     } catch (err) {
       console.error("Erreur durant la connexion:", err);
-      setError('Une erreur réseau est survenue. Veuillez réessayer.');
+      const handledError = errorMessageHandling(err);
+      setError(handledError.message);
     } finally {
+
       setIsLoading(false);
     }
   };
