@@ -108,7 +108,6 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
                             '&:hover': { boxShadow: 2, transform: 'translateY(-2px)' },
                         }}
                     >
-                    {/*petite barre sympa*/}
                     <Box
                         sx={{
                             width: 6,
@@ -158,8 +157,7 @@ export default function ProductList({ selectedDayItems, setItems, UserID })
             })}
         </List>
 
-        {/* Dialog de confirmation*/}
-        <Dialog open={confirmDialog.open} onClose={closeConfirm} disableRestoreFocus> {/*fix un warning*/}
+        <Dialog open={confirmDialog.open} onClose={closeConfirm} disableRestoreFocus>
             <DialogTitle>Supprimer le produit</DialogTitle>
             <DialogContent>
                 <DialogContentText>

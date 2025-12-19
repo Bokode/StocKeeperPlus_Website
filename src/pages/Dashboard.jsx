@@ -95,29 +95,8 @@ async function createInstanceFromDB(dataInstance) {
     authFetch(`${BASE_URL}/${listTable[indexTable]}/all`)
       .then(response => response.json())
       .then(json => {setData(json); setFilteredData(null);})
-      .catch(error => {setData(null); console.log(error)});
+      .catch(error => setData(null));
   }
-
-  /*function getInstanceFromDB(searchQuery) {
-    const nbPrimaryKeys = metadata[indexTable].primaryKeys.length;
-    const parts = searchQuery.split(";").map(p => p.trim());
-
-    if (parts.length !== nbPrimaryKeys) {
-      return alert(`Cette table nécessite ${nbPrimaryKeys} ID\nSi plusieurs ID, ils doivent être séparés par un point-virgule`);
-    } else {
-      authFetch(`${BASE_URL}/${listTable[indexTable]}/get/${(nbPrimaryKeys === 1 ? parts[0] : parts[0] + "/" + parts[1])}`)
-        .then(response => response.json())
-        .then(json => {
-          if (json && (json?.message || json[0]?.message)) {
-            console.error("Erreur :", json?.message);
-            setData([]);
-          } else {
-            setData([json]);
-          }
-        })
-        .catch(error => { setData(null); console.log(error) });
-    }
-  }*/
 
 async function updateInstanceFromDB(dataInstance) { 
     const tableName = listTable[indexTable];
@@ -180,11 +159,45 @@ async function updateInstanceFromDB(dataInstance) {
 
   return (
     <div className='containerApp'>
-      <Topbar listTable={listTable} listNumber={listNumber} indexTable={indexTable} indexNumber={indexNumber} setIndexTable={setIndexTable} setIndexNumber={setIndexNumber} localSearch={localSearch} getAllInstanceFromDB={getAllInstanceFromDB} setShowCreatePopUp={setShowCreatePopUp}/>
-      <ContentTable data={filteredData || data} viewNumber={listNumber[indexNumber]} startItemIndex={startItemIndex} deleteInstanceFromDB={deleteInstanceFromDB} updateInstanceFromDB={updateInstanceFromDB} columns={columns} metadata={metadata} currentTable={listTable[indexTable]}/>
-      <PageChanger numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0} onPageChange={onPageChange}/>
-      {showCreatePopUp && (<CreatePopUp setShowCreatePopUp={setShowCreatePopUp} columns={metadata[indexTable].columns} table={metadata[indexTable].name} createInstanceFromDB={createInstanceFromDB} setErrorMessage={setErrorMessage} setShowErrorPopUp={setShowErrorPopUp}/>)} 
-      {showErrorPopUp && (<ErrorPopUp error={errorMessage} setShowCreatePopUp={setShowErrorPopUp} />)}
+      <Topbar 
+        listTable={listTable} 
+        listNumber={listNumber} 
+        indexTable={indexTable} 
+        indexNumber={indexNumber} 
+        setIndexTable={setIndexTable} 
+        setIndexNumber={setIndexNumber} 
+        localSearch={localSearch} 
+        getAllInstanceFromDB={getAllInstanceFromDB} 
+        setShowCreatePopUp={setShowCreatePopUp}
+      />
+      <ContentTable 
+        data={filteredData || data} 
+        viewNumber={listNumber[indexNumber]} 
+        startItemIndex={startItemIndex} 
+        deleteInstanceFromDB={deleteInstanceFromDB} 
+        updateInstanceFromDB={updateInstanceFromDB} 
+        columns={columns} 
+        metadata={metadata} 
+        currentTable={listTable[indexTable]}
+      />
+      <PageChanger 
+        numberPage={Math.ceil(data?.length/(listNumber[indexNumber])) || 0} 
+        onPageChange={onPageChange}
+      />
+      {showCreatePopUp && 
+        (<CreatePopUp 
+          setShowCreatePopUp={setShowCreatePopUp} 
+          columns={metadata[indexTable].columns} 
+          table={metadata[indexTable].name} 
+          createInstanceFromDB={createInstanceFromDB} 
+          setErrorMessage={setErrorMessage} 
+          setShowErrorPopUp={setShowErrorPopUp}
+        />)} 
+      {showErrorPopUp && 
+        (<ErrorPopUp 
+          error={errorMessage} 
+          setShowCreatePopUp={setShowErrorPopUp}
+        />)}
     </div>
   )
 }

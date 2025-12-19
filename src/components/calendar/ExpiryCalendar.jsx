@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import dayjs from 'dayjs';
 
@@ -86,11 +85,10 @@ export default function ExpiryCalendar({UserID})
     }
   }, []);
 
-  // Récupère les items pour le jour actuellement sélectionné
   const selectedDayKey = selectedDay.format('YYYY-MM-DD');
   const selectedDayItems = itemsByDate.get(selectedDayKey) || [];
 
-  
+
   if (loading) 
   {
     return (
@@ -123,7 +121,6 @@ export default function ExpiryCalendar({UserID})
       <Box sx={{ width: '100%', height: '100%' }}>
         <Grid container spacing={3} sx={{ p: 2 }}>
           
-          {/* ========== COLONNE GAUCHE: CALENDRIER ========== */}
           <Grid>
             <Paper 
               elevation={3} 
@@ -142,7 +139,6 @@ export default function ExpiryCalendar({UserID})
               </Typography>
               <Divider sx={{ mb: 2 }} />
 
-              {/* Calendrier avec badges personnalisés via slots */}
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <DateCalendar
                   value={selectedDay}
@@ -166,7 +162,6 @@ export default function ExpiryCalendar({UserID})
                 />
               </Box>
               
-              {/* Légende des couleurs d'urgence */}
               <Box sx={{ mt: 2 }}>
                 <Typography variant="body2" fontWeight={600} gutterBottom>
                   Légende:
@@ -202,7 +197,6 @@ export default function ExpiryCalendar({UserID})
             </Paper>
           </Grid>
 
-          {/* ========== COLONNE DROITE: LISTE DES PRODUITS ========== */}
           <Grid>
             <Paper 
               elevation={3} 
@@ -213,7 +207,6 @@ export default function ExpiryCalendar({UserID})
                 flexDirection: 'column',
               }}
             >
-              {/* En-tête avec titre et compteur */}
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                 <Typography variant="h6" fontWeight={600}>
                   Produits du {selectedDay.format('DD/MM/YYYY')}
@@ -235,7 +228,6 @@ export default function ExpiryCalendar({UserID})
               }}
               >
 
-              {/* Affichage conditionnel: message si aucun produit, sinon liste */}
               {selectedDayItems.length === 0 ? (
                 <Box 
                   sx={{ 

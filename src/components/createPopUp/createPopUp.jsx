@@ -47,7 +47,6 @@ const FormField = ({ name, value, isLoading, onChange }) => {
           <option value="unit">unit</option>
         </select>
       ) : name === 'description' ? (  
-        /* --- NOUVEAU BLOC POUR TEXTAREA --- */
         <textarea
           className="inputReadInstance"
           value={value}
@@ -57,7 +56,7 @@ const FormField = ({ name, value, isLoading, onChange }) => {
             height: '100px', 
             minWidth: '250px', 
             resize: 'vertical',
-            fontFamily: 'inherit' // Pour garder la même police que les inputs
+            fontFamily: 'inherit'
           }}
         />
       ) : name === "expirationdate" ? (
@@ -85,7 +84,6 @@ const FormField = ({ name, value, isLoading, onChange }) => {
 function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB, setErrorMessage, setShowErrorPopUp }) {
   const filteredColumns = columns.filter(c => c !== "id" && c !== "imagepath");
 
-  // Initialisation propre (String vide "" pour le texte, false pour checkbox)
   const [formData, setFormData] = useState(() => {
     const initial = {};
     filteredColumns.forEach(c => {
@@ -116,10 +114,8 @@ function CreatePopUp({ setShowCreatePopUp, columns, table, createInstanceFromDB,
       return;
     }
 
-    // Préparation des données
     let dataToSend = { ...formData };
     
-    // Logique spécifique pour les Recettes
     if (table === "Recipe") {
        dataToSend = {
         label: formData.label,

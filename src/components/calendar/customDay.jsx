@@ -6,7 +6,6 @@ export default function customDay(props)
 {
     const { itemsByDate = new Map(), day, outsideCurrentMonth, ...other } = props;
 
-  
     const dateKey = day.format('YYYY-MM-DD');
     const dayItems = itemsByDate.get(dateKey) || [];
     const count = dayItems.length;

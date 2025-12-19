@@ -24,7 +24,6 @@ function IngredientsPopUp({ setShowIngredientsPopUp, ingredients, setIngredients
         label: food.label, 
         foodId: food.id,
         quantity: 1,
-        // On s'assure de bien stocker l'unité ici lors de l'ajout
         measuringunit: food.measuringunit 
       }]);
     }
@@ -53,7 +52,6 @@ function IngredientsPopUp({ setShowIngredientsPopUp, ingredients, setIngredients
       <div className="containerIngredientsPopUp" onClick={(e) => e.stopPropagation()}>
         <h2>Select ingredients</h2>
 
-        {/* Section des ingrédients sélectionnés */}
         <div className="selectedIngredientsSection">
           <h3>Selected ingredients ({selectedIngredients.length})</h3>
           {selectedIngredients.length === 0 ? (
@@ -70,7 +68,6 @@ function IngredientsPopUp({ setShowIngredientsPopUp, ingredients, setIngredients
                     onChange={(e) => handleQuantityChange(ing.label, e.target.value)}
                     className="quantityInput"
                   />
-                  {/* Modification ici : Affichage dynamique ou fallback "unit" en anglais */}
                   <span className="unitLabel">
                     {ing.measuringunit ? ing.measuringunit : 'unit'}
                   </span>
@@ -86,7 +83,6 @@ function IngredientsPopUp({ setShowIngredientsPopUp, ingredients, setIngredients
           )}
         </div>
 
-        {/* Section de recherche */}
         <div className="foodsSection">
           <h3>Add ingredients</h3>
           <input
