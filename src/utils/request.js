@@ -35,6 +35,7 @@ export async function authFetch(endpoint, option = {}) {
 
 function handleSessionExpiry()
 {
+    localStorage.removeItem('isAuthenticated');
     window.location.href = `/login?redirect${encodeURIComponent(window.location.pathname)}`;
 }
 
