@@ -1,6 +1,21 @@
 import "./maps.css";
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from "react-leaflet";
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import { authFetch } from "../../utils/request";
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41]
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
 
 function Maps() {
   const [userPos, setUserPos] = useState(null);
@@ -22,20 +37,26 @@ function Maps() {
   useEffect(() => {
     async function fetchStores() {
       try {
-        const res = await fetch("http://localhost:3001/v1/store/all");
+        const res = await authFetch("http://localhost:3001/v1/store/all", {
+            credentials: 'include' 
+        });
+
         if (!res.ok) {
           console.error("Erreur API :", res.status);
           return;
         }
         const data = await res.json();
-        setStores(
-          data.map(store => ({
-            ...store,
-            latitude: Number(store.latitude),
-            longitude: Number(store.longitude)
-            })
-          )
-        );
+        
+        const validStores = data
+            .map(store => ({
+                ...store,
+                latitude: Number(store.latitude),
+                longitude: Number(store.longitude)
+            }))
+            .filter(store => !isNaN(store.latitude) && !isNaN(store.longitude));
+
+        setStores(validStores);
+        
       } catch (err) {
         console.error("Erreur fetch :", err);
       }
@@ -61,18 +82,12 @@ function Maps() {
       <MapContainer 
         center={[50.4669, 4.8674]} 
         zoom={14} 
-        style={
-          {
-            height: "66vh",
-            width: "100%"
-          }
-          }>
-          
+        style={{ height: "66vh", width: "100%" }}
+      > 
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; OpenStreetMap contributors"
         />
-
 
         <SetViewOnUser />
 
