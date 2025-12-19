@@ -55,43 +55,15 @@ function Maps() {
     return null;
   }
 
-function ResizeMap() {
-  const map = useMap();
-
-  useEffect(() => {
-    const updateMapHeight = () => {
-      const mapContainer = map.getContainer();
-
-      const rect = mapContainer.getBoundingClientRect();
-      const topOffset = rect.top;
-
-      const bottomMargin = 20;
-      const availableHeight = window.innerHeight - topOffset - bottomMargin;
-
-      mapContainer.style.height = `${availableHeight}px`;
-      map.invalidateSize();
-    };
-
-    updateMapHeight();
-
-    window.addEventListener("resize", updateMapHeight);
-    return () => window.removeEventListener("resize", updateMapHeight);
-  }, [map]);
-
-  return null;
-}
-
-
-
 
   return (
-    <div style={{ height: "100%", width: "100%" }}>
+    <div style={{ width: "100%" }}>
       <MapContainer 
         center={[50.4669, 4.8674]} 
         zoom={14} 
         style={
           {
-            height: "100%",
+            height: "66vh",
             width: "100%"
           }
           }>
@@ -101,7 +73,6 @@ function ResizeMap() {
           attribution="&copy; OpenStreetMap contributors"
         />
 
-        <ResizeMap />
 
         <SetViewOnUser />
 
